@@ -95,7 +95,6 @@
       text-transform: uppercase;
       padding: 9px 15px;
       border: 1px solid currentColor;
-      border-radius: 999px;
       color: inherit;
       opacity: 1 !important;
     }
@@ -131,6 +130,26 @@
       background: linear-gradient(180deg, rgba(4,18,60,.36) 0%, rgba(4,18,60,0) 30%),
                   linear-gradient(0deg,   rgba(3,14,46,.55) 0%, rgba(3,14,46,0) 46%);
       pointer-events: none;
+    }
+    .hero-car {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: min(54%, 640px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-car img {
+      width: 100%;
+      height: auto;
+      display: block;
+      mix-blend-mode: luminosity;
+      opacity: 0.28;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.5) 22%, black 55%);
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.5) 22%, black 55%);
+    }
+    @media (max-width: 768px) {
+      .hero-car { display: none; }
     }
     .hero-content {
       position: relative;
@@ -188,7 +207,6 @@
       letter-spacing: .14em;
       text-transform: uppercase;
       padding: 15px 26px;
-      border-radius: 999px;
       font-weight: 700;
     }
     .btn-ghost {
@@ -201,7 +219,6 @@
       letter-spacing: .14em;
       text-transform: uppercase;
       padding: 15px 26px;
-      border-radius: 999px;
       border: 1px solid rgba(255,255,255,.4);
     }
     .hero-chips {
@@ -282,7 +299,6 @@
     .plan-card {
       background: rgba(255,255,255,.07);
       border: 1px solid rgba(255,255,255,.16);
-      border-radius: 16px;
       padding: 22px;
     }
     .plan-header {
@@ -345,7 +361,6 @@
       padding: 15px 18px;
       background: rgba(255,206,58,.1);
       border: 1px solid rgba(255,206,58,.32);
-      border-radius: 14px;
     }
     .pricing-warning p {
       margin: 0;
@@ -366,7 +381,6 @@
       text-transform: uppercase;
       font-weight: 700;
       padding: 15px 26px;
-      border-radius: 999px;
     }
     .car-visual {
       position: relative;
@@ -379,7 +393,6 @@
       position: absolute;
       width: min(86%, 420px);
       aspect-ratio: 1;
-      border-radius: 50%;
       background: radial-gradient(circle, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 62%);
     }
     .car-img {
@@ -404,7 +417,6 @@
       padding: 18px 20px;
       background: rgba(255,255,255,.05);
       border: 1px solid rgba(255,255,255,.13);
-      border-radius: 14px;
       font-size: 14.5px;
       font-weight: 500;
     }
@@ -495,7 +507,6 @@
       aspect-ratio: 4/3;
       background: #f1ece3;
       border: 1px solid #e7e5e0;
-      border-radius: 14px;
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -528,7 +539,6 @@
       color: #0a2a78;
       background: #ffce3a;
       padding: 5px 9px;
-      border-radius: 6px;
     }
     .car-meta {
       display: flex;
@@ -618,7 +628,6 @@
       padding: 18px 22px;
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.16);
-      border-radius: 14px;
       transition: background .2s;
     }
     .contact-link:hover { background: rgba(255,255,255,.1); }
@@ -702,7 +711,6 @@
       place-items: center;
       width: 38px;
       height: 38px;
-      border-radius: 50%;
       border: 1px solid rgba(255,255,255,.18);
       color: #fff;
       transition: background .2s, border-color .2s;
@@ -757,7 +765,6 @@
       width: 100%;
       height: 2px;
       background: currentColor;
-      border-radius: 2px;
       transition: transform .28s cubic-bezier(.4,0,.2,1), opacity .28s ease;
       transform-origin: center;
     }
@@ -881,6 +888,9 @@
         <span></span><span></span>
       </div>
       <div class="hero-overlay" aria-hidden="true"></div>
+      <div class="hero-car" aria-hidden="true">
+        <img src="project/assets/2019 Hyundai Tucson.jpg" alt="">
+      </div>
       <div class="hero-content">
         <p class="hero-eyebrow">Direct vehicle imports &middot; Ghana</p>
         <h1 class="hero-h1">We drive the world to your doorstep.</h1>
