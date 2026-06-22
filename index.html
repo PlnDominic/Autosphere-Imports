@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Autosphere Imports — Driving the World to You</title>
+  <meta name="description" content="Direct vehicle imports to Ghana with transparent DDP & CIF plans and clearance at Tema Port.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=Merriweather+Sans:wght@400;500;700;800&family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      background: #ffffff;
+      font-family: 'Assistant', system-ui, -apple-system, sans-serif;
+      color: #16181f;
+      font-size: 15px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: #1452d6; color: #fff; }
+
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── Header ── */
+    #site-header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 100;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 clamp(18px, 5vw, 56px);
+      color: #ffffff;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: background .3s ease, color .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+    }
+    #site-header.scrolled {
+      background: rgba(250, 248, 244, 0.92);
+      backdrop-filter: saturate(140%) blur(14px);
+      -webkit-backdrop-filter: saturate(140%) blur(14px);
+      color: #16181f;
+      border-bottom-color: #e7e5e0;
+    }
+    .header-logo {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+      color: inherit;
+    }
+    .header-logo-name {
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: .17em;
+    }
+    .header-logo-tag {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 8px;
+      letter-spacing: .4em;
+      opacity: .78;
+      margin-top: 4px;
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(14px, 2.4vw, 30px);
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .header-nav a {
+      font-size: 13px;
+      letter-spacing: .04em;
+      color: inherit;
+      opacity: .92;
+    }
+    .header-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 9px 15px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      color: inherit;
+      opacity: 1 !important;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      position: relative;
+      min-height: 94vh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      background: radial-gradient(120% 90% at 85% 8%, #0e46c4 0%, #0a37a6 36%, #062372 70%, #041a55 100%);
+      isolation: isolate;
+    }
+    .hero-lanes {
+      position: absolute;
+      top: 0; bottom: 0; right: 13%;
+      width: 54px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 0;
+      opacity: .85;
+      pointer-events: none;
+    }
+    .hero-lanes span {
+      width: 7px;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.85) 14%, rgba(255,255,255,.85) 86%, rgba(255,255,255,0) 100%);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(180deg, rgba(4,18,60,.36) 0%, rgba(4,18,60,0) 30%),
+                  linear-gradient(0deg,   rgba(3,14,46,.55) 0%, rgba(3,14,46,0) 46%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      padding: 120px clamp(20px, 5vw, 56px) clamp(48px, 8vh, 92px);
+      color: #fff;
+    }
+    .hero-eyebrow {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: #9fc0ff;
+      opacity: 0;
+      animation: heroIn .9s cubic-bezier(.25,.1,.25,1) .15s forwards;
+    }
+    .hero-h1 {
+      max-width: 17ch;
+      margin: 18px 0 0;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(40px, 7.4vw, 84px);
+      line-height: 1.0;
+      letter-spacing: .005em;
+      text-shadow: 0 2px 36px rgba(0,0,0,.28);
+      opacity: 0;
+      animation: heroIn 1s cubic-bezier(.25,.1,.25,1) .42s forwards;
+    }
+    .hero-lead {
+      max-width: 50ch;
+      margin: 26px 0 0;
+      font-size: clamp(16px, 1.5vw, 19px);
+      line-height: 1.65;
+      color: rgba(255,255,255,.9);
+      opacity: 0;
+      animation: heroIn 1s cubic-bezier(.25,.1,.25,1) .62s forwards;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+      opacity: 0;
+      animation: heroIn 1s cubic-bezier(.25,.1,.25,1) .8s forwards;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      color: #0a2a78;
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 15px 26px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 15px 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.4);
+    }
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 30px;
+      margin-top: 46px;
+      padding-top: 26px;
+      border-top: 1px solid rgba(255,255,255,.16);
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 11.5px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+      opacity: 0;
+      animation: heroIn 1s cubic-bezier(.25,.1,.25,1) .98s forwards;
+    }
+
+    /* ── Pricing ── */
+    #pricing {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, #04205f 0%, #0937a0 58%, #0c44bd 100%);
+      color: #fff;
+      padding: clamp(72px, 11vh, 128px) clamp(20px, 5vw, 56px);
+    }
+    .pricing-lanes {
+      position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 48px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 0;
+      opacity: .5;
+      transform: translateX(120px);
+      pointer-events: none;
+    }
+    .pricing-lanes span {
+      width: 6px;
+      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.7) 20%, rgba(255,255,255,.7) 80%, rgba(255,255,255,0));
+    }
+    .pricing-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+      gap: clamp(32px, 4vw, 64px);
+      align-items: center;
+    }
+    .pricing-eyebrow {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #ffce3a;
+    }
+    .pricing-h2 {
+      margin: 14px 0 0;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(30px, 4.4vw, 50px);
+      line-height: 1.04;
+    }
+    .pricing-lead {
+      margin: 16px 0 0;
+      max-width: 46ch;
+      color: rgba(255,255,255,.82);
+      font-size: 16px;
+    }
+    .pricing-plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+      gap: 18px;
+      margin-top: 30px;
+    }
+    .plan-card {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 16px;
+      padding: 22px;
+    }
+    .plan-header {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .plan-type {
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: .04em;
+    }
+    .plan-subtitle {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.65);
+    }
+    .plan-price {
+      margin-top: 6px;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      color: #ffce3a;
+      letter-spacing: .01em;
+    }
+    .plan-rows {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+    .plan-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .plan-row.bordered {
+      padding-bottom: 11px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .plan-label {
+      color: rgba(255,255,255,.7);
+      font-size: 13.5px;
+    }
+    .plan-value {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .plan-note {
+      font-size: 12px;
+      color: rgba(255,255,255,.55);
+    }
+    .pricing-warning {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 15px 18px;
+      background: rgba(255,206,58,.1);
+      border: 1px solid rgba(255,206,58,.32);
+      border-radius: 14px;
+    }
+    .pricing-warning p {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.88);
+    }
+    .pricing-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 22px;
+      background: #fff;
+      color: #0a2a78;
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 15px 26px;
+      border-radius: 999px;
+    }
+    .car-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 360px;
+    }
+    .car-glow {
+      position: absolute;
+      width: min(86%, 420px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 62%);
+    }
+    .car-img {
+      position: relative;
+      width: min(86%, 440px);
+      height: auto;
+      filter: drop-shadow(0 30px 50px rgba(0,0,0,.4));
+    }
+    .trust-chips {
+      position: relative;
+      z-index: 1;
+      max-width: 1240px;
+      margin: clamp(40px, 6vh, 68px) auto 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+      gap: 16px;
+    }
+    .trust-chip {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 18px 20px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 14px;
+      font-size: 14.5px;
+      font-weight: 500;
+    }
+
+    /* ── How it works ── */
+    #how {
+      background: #faf8f4;
+      padding: clamp(72px, 11vh, 128px) clamp(20px, 5vw, 56px);
+    }
+    .how-inner { max-width: 1240px; margin: 0 auto; }
+    .section-eyebrow {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #1452d6;
+    }
+    .section-h2 {
+      margin: 14px 0 0;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(28px, 4.4vw, 46px);
+      line-height: 1.06;
+      color: #16181f;
+    }
+    .steps {
+      margin-top: clamp(36px, 5vh, 60px);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      gap: clamp(20px, 2.6vw, 40px);
+    }
+    .step {
+      padding-top: 24px;
+      border-top: 2px solid #16181f;
+    }
+    .step-num {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 13px;
+      letter-spacing: .1em;
+      color: #1452d6;
+    }
+    .step-h3 {
+      margin: 14px 0 0;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 700;
+      font-size: 21px;
+      color: #16181f;
+    }
+    .step-p {
+      margin: 12px 0 0;
+      color: #4c515d;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── Inventory ── */
+    #inventory {
+      background: #ffffff;
+      padding: clamp(72px, 11vh, 128px) clamp(20px, 5vw, 56px);
+    }
+    .inventory-inner { max-width: 1240px; margin: 0 auto; }
+    .inventory-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .inventory-request {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #4c515d;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .car-grid {
+      margin-top: clamp(34px, 5vh, 56px);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+      gap: clamp(20px, 2.2vw, 34px) clamp(16px, 1.8vw, 26px);
+    }
+    .car-card { position: relative; }
+    .car-thumb {
+      position: relative;
+      aspect-ratio: 4/3;
+      background: #f1ece3;
+      border: 1px solid #e7e5e0;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .car-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .car-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: #8a8e98;
+      font-size: 13px;
+    }
+    .car-placeholder svg { opacity: .4; }
+    .promo-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #0a2a78;
+      background: #ffce3a;
+      padding: 5px 9px;
+      border-radius: 6px;
+    }
+    .car-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .car-name {
+      margin: 0;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #16181f;
+    }
+    .car-year {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 11px;
+      letter-spacing: .08em;
+      color: #8a8e98;
+    }
+    .car-sub {
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .car-body {
+      font-size: 13px;
+      color: #8a8e98;
+      font-family: 'Anonymous Pro', monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .car-note {
+      font-size: 13.5px;
+      color: #4c515d;
+      font-weight: 500;
+    }
+
+    /* ── Contact ── */
+    #contact {
+      position: relative;
+      overflow: hidden;
+      background: #0c2249;
+      color: #fff;
+      padding: clamp(64px, 9vh, 104px) clamp(20px, 5vw, 56px);
+    }
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: clamp(28px, 4vw, 56px);
+      align-items: center;
+    }
+    .contact-eyebrow {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #9fc0ff;
+    }
+    .contact-h2 {
+      margin: 14px 0 0;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.06;
+    }
+    .contact-lead {
+      margin: 16px 0 0;
+      max-width: 42ch;
+      color: rgba(255,255,255,.78);
+      font-size: 16px;
+    }
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      transition: background .2s;
+    }
+    .contact-link:hover { background: rgba(255,255,255,.1); }
+    .contact-link-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .contact-link-label {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 10.5px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.6);
+    }
+    .contact-link-number { font-size: 17px; font-weight: 600; }
+    .contact-link-alt { font-size: 13.5px; color: rgba(255,255,255,.6); }
+
+    /* ── Footer ── */
+    footer {
+      background: #0a1626;
+      color: rgba(255,255,255,.72);
+      padding: clamp(56px, 8vh, 84px) clamp(20px, 5vw, 56px) 30px;
+    }
+    .footer-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+      padding-bottom: clamp(32px, 5vh, 52px);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .footer-brand { max-width: 34ch; }
+    .footer-logo-name {
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: .17em;
+      color: #fff;
+    }
+    .footer-logo-tag {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 8px;
+      letter-spacing: .4em;
+      color: rgba(255,255,255,.5);
+      margin-top: 4px;
+      display: block;
+    }
+    .footer-desc {
+      margin: 18px 0 0;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .footer-cols {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(36px, 6vw, 72px);
+    }
+    .footer-col h4 {
+      margin: 0 0 16px;
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      font-weight: 400;
+    }
+    .footer-col-links {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      font-size: 14.5px;
+    }
+    .footer-col-links a { color: rgba(255,255,255,.75); }
+    .footer-col-links a:hover { color: #fff; }
+    .social-links { display: flex; gap: 12px; }
+    .social-link {
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.18);
+      color: #fff;
+      transition: background .2s, border-color .2s;
+    }
+    .social-link:hover {
+      background: rgba(255,255,255,.1);
+      border-color: rgba(255,255,255,.35);
+    }
+    .footer-bottom {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12.5px;
+      color: rgba(255,255,255,.45);
+      font-family: 'Anonymous Pro', monospace;
+      letter-spacing: .06em;
+    }
+
+    /* ── Reveal animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s cubic-bezier(.25,.1,.25,1), transform .7s cubic-bezier(.25,.1,.25,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header id="site-header">
+    <a href="#top" class="header-logo">
+      <span class="header-logo-name">AUTOSPHERE</span>
+      <span class="header-logo-tag">IMPORTS &middot; DRIVING THE WORLD TO YOU</span>
+    </a>
+    <nav class="header-nav">
+      <a href="#inventory">Inventory</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+      <a href="https://wa.me/233537633242" target="_blank" rel="noopener" class="header-cta">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.76.46 3.45 1.34 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.8 14.08c-.25.69-1.45 1.32-1.99 1.36-.51.04-1.16.21-3.78-.79-3.18-1.25-5.2-4.5-5.36-4.71-.16-.21-1.28-1.7-1.28-3.24 0-1.54.81-2.3 1.09-2.61.28-.31.61-.39.81-.39.2 0 .41 0 .59.01.19.01.44-.07.69.53.25.59.85 2.05.93 2.2.07.15.12.32.02.53-.1.21-.15.32-.3.5-.15.18-.31.39-.45.53-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.35 1.45.29.15.46.12.63-.07.17-.19.73-.85.92-1.14.19-.29.39-.24.65-.15.26.1 1.66.78 1.95.93.29.15.48.21.55.33.07.12.07.71-.18 1.4Z"/>
+        </svg>
+        WhatsApp
+      </a>
+    </nav>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="top">
+    <div id="hero">
+      <div class="hero-lanes" aria-hidden="true">
+        <span></span><span></span>
+      </div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="hero-eyebrow">Direct vehicle imports &middot; Ghana</p>
+        <h1 class="hero-h1">We drive the world to your doorstep.</h1>
+        <p class="hero-lead">Reserve a vehicle with a deposit and we handle the rest &mdash; shipping, customs at Tema Port, and delivery. Clear DDP and CIF plans, fair terms, no surprises.</p>
+        <div class="hero-actions">
+          <a href="#inventory" class="btn-primary">
+            Browse the lineup
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+          <a href="#how" class="btn-ghost">See how it works</a>
+        </div>
+        <div class="hero-chips">
+          <span>DDP &amp; CIF plans</span>
+          <span>Tema Port clearance</span>
+          <span>Deposit secures your car</span>
+          <span>Limited promo slots</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURED / PRICING ===================== -->
+  <section id="pricing">
+    <div class="pricing-lanes" aria-hidden="true">
+      <span></span><span></span>
+    </div>
+
+    <div class="pricing-inner reveal">
+      <div>
+        <p class="pricing-eyebrow">Featured promo &middot; Limited slots</p>
+        <h2 class="pricing-h2">Toyota Yaris L &middot; 2016</h2>
+        <p class="pricing-lead">Choose the plan that suits you. A GHC 50,000 deposit secures your Yaris L &mdash; pay the balance on the terms below.</p>
+
+        <div class="pricing-plans">
+          <!-- DDP -->
+          <div class="plan-card">
+            <div class="plan-header">
+              <span class="plan-type">DDP</span>
+              <span class="plan-subtitle">Delivered Duty Paid</span>
+            </div>
+            <div class="plan-price">GHC 135,000</div>
+            <div class="plan-rows">
+              <div class="plan-row bordered">
+                <span class="plan-label">Deposit</span>
+                <span class="plan-value">GHC 50,000</span>
+              </div>
+              <div class="plan-row">
+                <span class="plan-label">Balance</span>
+                <span class="plan-value">GHC 85,000</span>
+              </div>
+              <span class="plan-note">Due 2 weeks after customs clearance</span>
+            </div>
+          </div>
+          <!-- CIF -->
+          <div class="plan-card">
+            <div class="plan-header">
+              <span class="plan-type">CIF</span>
+              <span class="plan-subtitle">To Tema Port</span>
+            </div>
+            <div class="plan-price">GHC 84,000</div>
+            <div class="plan-rows">
+              <div class="plan-row bordered">
+                <span class="plan-label">Deposit</span>
+                <span class="plan-value">GHC 50,000</span>
+              </div>
+              <div class="plan-row">
+                <span class="plan-label">Balance</span>
+                <span class="plan-value">GHC 34,000</span>
+              </div>
+              <span class="plan-note">Due when the car arrives at port</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pricing-warning">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffce3a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px;" aria-hidden="true">
+            <path d="M12 9v4M12 17h.01M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.7 3.86a2 2 0 0 0-3.4 0Z"/>
+          </svg>
+          <p><strong style="color:#fff;">Important:</strong> miss the final payment and you lose the car &mdash; but you get back <strong style="color:#ffce3a;">80% of your deposit (GHC 40,000)</strong>.</p>
+        </div>
+
+        <a href="https://wa.me/233537633242?text=I'm%20interested%20in%20the%20Yaris%20L%202016%20promo" target="_blank" rel="noopener" class="pricing-cta">
+          Reserve this Yaris
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="car-visual">
+        <div class="car-glow" aria-hidden="true"></div>
+        <img src="project/assets/yaris-render.png" alt="Toyota Yaris L 2016, top-down view" class="car-img">
+      </div>
+    </div>
+
+    <div class="trust-chips reveal">
+      <div class="trust-chip">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9fc0ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+        <span>Deposit secures your car</span>
+      </div>
+      <div class="trust-chip">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9fc0ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v18M3 7h18M6 7l-3 6a3 3 0 0 0 6 0L6 7Zm12 0-3 6a3 3 0 0 0 6 0l-3-6Z"/>
+        </svg>
+        <span>Transparent &amp; fair terms</span>
+      </div>
+      <div class="trust-chip">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9fc0ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="13" r="8"/>
+          <path d="M12 9v4l2 2M9 2h6"/>
+        </svg>
+        <span>Limited promo slots</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section id="how">
+    <div class="how-inner">
+      <div class="reveal" style="max-width:62ch;">
+        <p class="section-eyebrow">How it works</p>
+        <h2 class="section-h2">Deposit, shipping, delivery &mdash; three clear steps.</h2>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <span class="step-num">01</span>
+          <h3 class="step-h3">Reserve with a deposit</h3>
+          <p class="step-p">A GHC 50,000 deposit locks in your vehicle and price. Pick DDP or CIF &mdash; you choose how the balance is handled.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <h3 class="step-h3">We ship &amp; clear</h3>
+          <p class="step-p">Your car is shipped to Tema Port. With CIF we deliver to port; with DDP we also handle customs and duties end&#8209;to&#8209;end.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <h3 class="step-h3">Balance &amp; handover</h3>
+          <p class="step-p">Settle the balance &mdash; on arrival for CIF, or within two weeks of clearance for DDP &mdash; and take the keys.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INVENTORY ===================== -->
+  <section id="inventory">
+    <div class="inventory-inner">
+      <div class="inventory-header reveal">
+        <div style="max-width:50ch;">
+          <p class="section-eyebrow">The lineup</p>
+          <h2 class="section-h2">Cars ready to import.</h2>
+        </div>
+        <a href="https://wa.me/233537633242" target="_blank" rel="noopener" class="inventory-request">
+          Request a model
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="car-grid reveal">
+
+        <!-- Toyota Yaris L — has actual render image -->
+        <div class="car-card">
+          <div class="car-thumb">
+            <img src="project/assets/yaris-render.png" alt="Toyota Yaris L 2016">
+            <span class="promo-badge">Promo</span>
+          </div>
+          <div class="car-meta">
+            <h3 class="car-name">Toyota Yaris L</h3>
+            <span class="car-year">2016</span>
+          </div>
+          <div class="car-sub">
+            <span class="car-body">Hatchback</span>
+            <span class="car-note">from GHC 84,000</span>
+          </div>
+        </div>
+
+        <!-- Toyota Corolla -->
+        <div class="car-card">
+          <div class="car-thumb">
+            <div class="car-placeholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8a8e98" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="m21 15-5-5L5 21"/>
+              </svg>
+              <span>Add Corolla photo</span>
+            </div>
+          </div>
+          <div class="car-meta">
+            <h3 class="car-name">Toyota Corolla</h3>
+            <span class="car-year">2018</span>
+          </div>
+          <div class="car-sub">
+            <span class="car-body">Sedan</span>
+            <span class="car-note">Request a quote</span>
+          </div>
+        </div>
+
+        <!-- Toyota RAV4 -->
+        <div class="car-card">
+          <div class="car-thumb">
+            <div class="car-placeholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8a8e98" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="m21 15-5-5L5 21"/>
+              </svg>
+              <span>Add RAV4 photo</span>
+            </div>
+          </div>
+          <div class="car-meta">
+            <h3 class="car-name">Toyota RAV4</h3>
+            <span class="car-year">2019</span>
+          </div>
+          <div class="car-sub">
+            <span class="car-body">SUV</span>
+            <span class="car-note">Request a quote</span>
+          </div>
+        </div>
+
+        <!-- Toyota Camry -->
+        <div class="car-card">
+          <div class="car-thumb">
+            <div class="car-placeholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8a8e98" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="m21 15-5-5L5 21"/>
+              </svg>
+              <span>Add Camry photo</span>
+            </div>
+          </div>
+          <div class="car-meta">
+            <h3 class="car-name">Toyota Camry</h3>
+            <span class="car-year">2018</span>
+          </div>
+          <div class="car-sub">
+            <span class="car-body">Sedan</span>
+            <span class="car-note">Request a quote</span>
+          </div>
+        </div>
+
+        <!-- Honda Civic -->
+        <div class="car-card">
+          <div class="car-thumb">
+            <div class="car-placeholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8a8e98" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="m21 15-5-5L5 21"/>
+              </svg>
+              <span>Add Civic photo</span>
+            </div>
+          </div>
+          <div class="car-meta">
+            <h3 class="car-name">Honda Civic</h3>
+            <span class="car-year">2017</span>
+          </div>
+          <div class="car-sub">
+            <span class="car-body">Sedan</span>
+            <span class="car-note">Request a quote</span>
+          </div>
+        </div>
+
+        <!-- Hyundai Tucson -->
+        <div class="car-card">
+          <div class="car-thumb">
+            <div class="car-placeholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8a8e98" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="m21 15-5-5L5 21"/>
+              </svg>
+              <span>Add Tucson photo</span>
+            </div>
+          </div>
+          <div class="car-meta">
+            <h3 class="car-name">Hyundai Tucson</h3>
+            <span class="car-year">2019</span>
+          </div>
+          <div class="car-sub">
+            <span class="car-body">SUV</span>
+            <span class="car-note">Request a quote</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section id="contact">
+    <div class="contact-inner reveal">
+      <div>
+        <p class="contact-eyebrow">Ready to import?</p>
+        <h2 class="contact-h2">Let's get your car moving.</h2>
+        <p class="contact-lead">Message us on WhatsApp to reserve, or call to talk through DDP and CIF options.</p>
+      </div>
+      <div class="contact-links">
+        <a href="https://wa.me/233537633242" target="_blank" rel="noopener" class="contact-link">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.76.46 3.45 1.34 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.8 14.08c-.25.69-1.45 1.32-1.99 1.36-.51.04-1.16.21-3.78-.79-3.18-1.25-5.2-4.5-5.36-4.71-.16-.21-1.28-1.7-1.28-3.24 0-1.54.81-2.3 1.09-2.61.28-.31.61-.39.81-.39.2 0 .41 0 .59.01.19.01.44-.07.69.53.25.59.85 2.05.93 2.2.07.15.12.32.02.53-.1.21-.15.32-.3.5-.15.18-.31.39-.45.53-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.35 1.45.29.15.46.12.63-.07.17-.19.73-.85.92-1.14.19-.29.39-.24.65-.15.26.1 1.66.78 1.95.93.29.15.48.21.55.33.07.12.07.71-.18 1.4Z"/>
+          </svg>
+          <div class="contact-link-text">
+            <span class="contact-link-label">WhatsApp only</span>
+            <span class="contact-link-number">+233 537 633 242</span>
+          </div>
+        </a>
+        <a href="tel:+233247620520" class="contact-link">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9fc0ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/>
+          </svg>
+          <div class="contact-link-text">
+            <span class="contact-link-label">Calls only</span>
+            <span class="contact-link-number">+233 247 620 520</span>
+            <span class="contact-link-alt">+86 182 1157 5541</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div style="display:flex;flex-direction:column;line-height:1;">
+          <span class="footer-logo-name">AUTOSPHERE</span>
+          <span class="footer-logo-tag">IMPORTS &middot; DRIVING THE WORLD TO YOU</span>
+        </div>
+        <p class="footer-desc">Direct vehicle imports to Ghana with transparent DDP &amp; CIF plans and clearance at Tema Port.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <div class="footer-col-links">
+            <a href="#inventory">Inventory</a>
+            <a href="#how">How it works</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <div class="footer-col-links">
+            <a href="https://wa.me/233537633242" target="_blank" rel="noopener">WhatsApp &middot; +233 537 633 242</a>
+            <a href="tel:+233247620520">Call &middot; +233 247 620 520</a>
+            <a href="tel:+8618211575541">Call &middot; +86 182 1157 5541</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Follow</h4>
+          <div class="social-links">
+            <a href="https://facebook.com/Autosphereimports" target="_blank" rel="noopener" class="social-link" aria-label="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H7v3h3v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1Z"/>
+              </svg>
+            </a>
+            <a href="https://youtube.com/@Autosphereimports" target="_blank" rel="noopener" class="social-link" aria-label="YouTube">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M23 7.5a3 3 0 0 0-2.1-2.1C19 5 12 5 12 5s-7 0-8.9.4A3 3 0 0 0 1 7.5 31 31 0 0 0 .6 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1C5 19 12 19 12 19s7 0 8.9-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.4 12 31 31 0 0 0 23 7.5ZM9.8 15.3V8.7l5.7 3.3-5.7 3.3Z"/>
+              </svg>
+            </a>
+            <a href="https://instagram.com/autosphere_imports" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+            <a href="https://x.com/InfoAutosphere" target="_blank" rel="noopener" class="social-link" aria-label="X (Twitter)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18.2 2H21l-6.5 7.4L22 22h-6.3l-4.9-6.4L5.1 22H2.3l7-8L2 2h6.4l4.4 5.9L18.2 2Zm-1.1 18h1.6L7 3.8H5.3L17.1 20Z"/>
+              </svg>
+            </a>
+            <a href="https://tiktok.com/@autosphere_imports" target="_blank" rel="noopener" class="social-link" aria-label="TikTok">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16.5 2c.3 2.2 1.6 3.7 3.7 3.9v2.5c-1.3.1-2.5-.3-3.7-1v6.8c0 3.6-2.7 6-5.9 5.7-3-.3-5-2.9-4.5-6 .4-2.5 2.6-4.2 5.2-4v2.7c-.5-.1-1-.1-1.5.1-1 .3-1.6 1.2-1.4 2.3.2 1 1.1 1.7 2.2 1.5 1-.2 1.6-1 1.6-2.1V2h2.5Z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Autosphere Imports. All rights reserved.</span>
+      <span>Tema Port &middot; Ghana</span>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll behavior
+    const header = document.getElementById('site-header');
+    function updateHeader() {
+      if ((window.scrollY || document.documentElement.scrollTop) > 40) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    }
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader();
+
+    // Scroll-reveal for [data-reveal] / .reveal elements
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
+
+</body>
+</html>
