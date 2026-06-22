@@ -735,6 +735,117 @@
       opacity: 1;
       transform: none;
     }
+
+    /* ── Hamburger button ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+      flex-shrink: 0;
+      z-index: 101;
+    }
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      transition: transform .28s cubic-bezier(.4,0,.2,1), opacity .28s ease;
+      transform-origin: center;
+    }
+    #site-header.nav-open .hamburger span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    #site-header.nav-open .hamburger span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    #site-header.nav-open .hamburger span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* ── Mobile nav drawer ── */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      .header-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        position: fixed;
+        top: 74px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(4, 20, 68, 0.97);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        padding: 16px 28px 48px;
+        overflow-y: auto;
+        z-index: 99;
+        /* hidden state */
+        opacity: 0;
+        transform: translateY(-8px);
+        pointer-events: none;
+        transition: opacity .28s ease, transform .28s cubic-bezier(.4,0,.2,1);
+      }
+      #site-header.nav-open .header-nav {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+      .header-nav > a:not(.header-cta) {
+        font-size: 20px;
+        letter-spacing: .04em;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255,255,255,.1);
+        opacity: 1;
+        color: #fff;
+      }
+      .header-nav > a:not(.header-cta):last-of-type {
+        border-bottom: none;
+      }
+      .header-cta {
+        margin-top: 28px;
+        align-self: flex-start;
+        font-size: 12px;
+        padding: 12px 20px;
+        color: #fff;
+        border-color: rgba(255,255,255,.5);
+      }
+
+      /* Hero tweaks */
+      .hero-content { padding-top: 100px; }
+      .hero-chips { gap: 8px 18px; font-size: 10.5px; }
+
+      /* Pricing — hide car image on very small screens to reduce scroll */
+      .car-visual { min-height: 260px; }
+
+      /* Inventory grid: 2 cols on mid-mobile, 1 on tiny */
+      .car-grid {
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+      }
+
+      /* Footer cols stack cleanly */
+      .footer-cols { gap: 32px; }
+      .footer-inner { gap: 32px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
+      .car-grid { grid-template-columns: 1fr; }
+      .pricing-plans { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -745,7 +856,11 @@
       <span class="header-logo-name">AUTOSPHERE</span>
       <span class="header-logo-tag">IMPORTS &middot; DRIVING THE WORLD TO YOU</span>
     </a>
-    <nav class="header-nav">
+    <button class="hamburger" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="main-nav">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="header-nav" id="main-nav">
       <a href="#inventory">Inventory</a>
       <a href="#how">How it works</a>
       <a href="#pricing">Pricing</a>
@@ -769,8 +884,7 @@
       <div class="hero-content">
         <p class="hero-eyebrow">Direct vehicle imports &middot; Ghana</p>
         <h1 class="hero-h1">We drive the world to your doorstep.</h1>
-        <p class="hero-lead">Reserve a vehicle with a deposit and we handle the rest &mdash; shipping, customs at Tema Port, and delivery. Clear DDP and CIF plans, fair terms, no surprises.</p>
-        <div class="hero-actions">
+<div class="hero-actions">
           <a href="#inventory" class="btn-primary">
             Browse the lineup
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1175,7 +1289,38 @@
     window.addEventListener('scroll', updateHeader, { passive: true });
     updateHeader();
 
-    // Scroll-reveal for [data-reveal] / .reveal elements
+    // Hamburger toggle
+    const toggle = document.getElementById('nav-toggle');
+    const nav = document.getElementById('main-nav');
+
+    function openNav() {
+      header.classList.add('nav-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close navigation');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeNav() {
+      header.classList.remove('nav-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', () => {
+      header.classList.contains('nav-open') ? closeNav() : openNav();
+    });
+
+    // Close when a nav link is clicked
+    nav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeNav);
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeNav();
+    });
+
+    // Scroll-reveal for .reveal elements
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
