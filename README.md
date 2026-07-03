@@ -1,5 +1,7 @@
 # CODING AGENTS: READ THIS FIRST
 
+> **Implementation status:** the design below has already been built and is live, as a Next.js + TypeScript + Tailwind CSS app (App Router). The homepage is `app/page.tsx` plus `components/*.tsx`, styles are in `app/globals.css`, the car lineup lives in `data/cars.json`, and the admin draft workspace is `app/admin/page.tsx`. See `ADMIN.md` for the admin workflow. The rest of this file describes the original design handoff bundle for historical context.
+
 This is a **handoff bundle** from Claude Design (claude.ai/design).
 
 A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.

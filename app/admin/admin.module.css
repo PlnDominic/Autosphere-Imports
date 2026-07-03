@@ -1,0 +1,259 @@
+.pageHeader {
+  background: linear-gradient(160deg, #04205f 0%, #0937a0 70%, #0c44bd 100%);
+  color: #fff;
+  padding: 18px clamp(18px, 5vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.logo { display: flex; flex-direction: column; line-height: 1; text-decoration: none; color: inherit; }
+.logo-name {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: .17em;
+}
+.logo-tag {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 8px;
+  letter-spacing: .4em;
+  opacity: .78;
+  margin-top: 4px;
+}
+.header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.header-right a {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.4);
+  padding: 8px 14px;
+  text-decoration: none;
+}
+.header-right a:hover { background: rgba(255,255,255,.1); }
+
+.mainWrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vh, 48px) clamp(18px, 4vw, 32px) 80px;
+}
+.eyebrow {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 12px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: #1452d6;
+  margin: 0;
+}
+.h1 {
+  margin: 10px 0 0;
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.08;
+}
+.lead { color: #4c515d; max-width: 62ch; margin: 12px 0 0; }
+
+.card {
+  background: #fff;
+  border: 1px solid #e7e5e0;
+  padding: 24px;
+  margin-top: 26px;
+}
+
+.label {
+  display: block;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #4c515d;
+  margin-bottom: 6px;
+}
+.textInput {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid #d8d5cf;
+  background: #faf8f4;
+  font-family: 'Assistant', sans-serif;
+  font-size: 15px;
+  color: #16181f;
+}
+.textInput:focus { outline: 2px solid #1452d6; outline-offset: -1px; }
+.field { margin-top: 16px; }
+.field:first-child { margin-top: 0; }
+.hint { font-size: 13px; color: #8a8e98; margin-top: 6px; }
+.check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  color: #4c515d;
+  margin-top: 14px;
+  cursor: pointer;
+}
+.check input { width: 16px; height: 16px; accent-color: #1452d6; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #0a2a78;
+  color: #fff;
+  border: none;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 14px 24px;
+  cursor: pointer;
+}
+.btn:hover { background: #0c35a0; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.ghost {
+  background: none;
+  color: #16181f;
+  border: 1px solid #d8d5cf;
+  font-weight: 400;
+}
+.ghost:hover { background: #f1ece3; }
+.danger { background: none; border: 1px solid #d33; color: #b22; font-weight: 400; }
+.danger:hover { background: #fdf1f1; }
+.small { padding: 8px 13px; font-size: 10.5px; }
+
+.msg {
+  margin-top: 16px;
+  padding: 13px 16px;
+  font-size: 14px;
+}
+.msgError { background: #fdf1f1; border: 1px solid #ecc; color: #922; }
+.msgOk { background: #eef7ee; border: 1px solid #cde5cd; color: #26622a; }
+.msgInfo { background: #eef3fd; border: 1px solid #cdd9f0; color: #1a3f8f; }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.toolbar h2 {
+  margin: 0;
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+}
+.dirty-note {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #b8860b;
+}
+
+.car-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid #e7e5e0;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.editing { outline: 2px solid #1452d6; outline-offset: -1px; }
+.row-thumb {
+  width: 84px;
+  height: 63px;
+  flex: none;
+  background: #f1ece3;
+  border: 1px solid #e7e5e0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: #b6b2aa;
+  font-size: 11px;
+}
+.row-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.row-main { flex: 1 1 200px; min-width: 0; }
+.row-name {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.row-badge {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 9.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #0a2a78;
+  background: #ffce3a;
+  padding: 3px 7px;
+}
+.row-sub {
+  font-size: 13px;
+  color: #8a8e98;
+  font-family: 'Anonymous Pro', monospace;
+  letter-spacing: .05em;
+  margin-top: 3px;
+}
+.row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.icon-btn {
+  background: none;
+  border: 1px solid #d8d5cf;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  color: #4c515d;
+  font-size: 14px;
+  line-height: 1;
+}
+.icon-btn:hover { background: #f1ece3; }
+.icon-btn:disabled { opacity: .35; cursor: default; }
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 16px;
+}
+.editor-grid .field { margin-top: 0; }
+.img-preview {
+  margin-top: 10px;
+  width: 180px;
+  aspect-ratio: 4/3;
+  background: #f1ece3;
+  border: 1px solid #e7e5e0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: #b6b2aa;
+  font-size: 12px;
+}
+.img-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.editor-actions { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+.fileInput { font-size: 13px; }
+
+.draft-bar {
+  position: sticky;
+  bottom: 0;
+  margin-top: 30px;
+  background: rgba(250, 248, 244, .95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid #e7e5e0;
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.draft-note { font-size: 13.5px; color: #4c515d; }

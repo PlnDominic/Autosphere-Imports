@@ -6,7 +6,7 @@
       "year": "2016",
       "body": "Hatchback",
       "note": "from GHC 84,000",
-      "image": "project/assets/yaris-render.png",
+      "image": "/images/yaris-render.png",
       "promo": true
     },
     {
@@ -15,7 +15,7 @@
       "year": "2018",
       "body": "Sedan",
       "note": "Request a quote",
-      "image": "project/assets/corolla.jpg",
+      "image": "/images/corolla.jpg",
       "promo": false
     },
     {
@@ -24,7 +24,7 @@
       "year": "2019",
       "body": "SUV",
       "note": "Request a quote",
-      "image": "project/assets/2019 Toyota RAV4.jpg",
+      "image": "/images/2019 Toyota RAV4.jpg",
       "promo": false
     },
     {
@@ -33,7 +33,7 @@
       "year": "2018",
       "body": "Sedan",
       "note": "Request a quote",
-      "image": "project/assets/2018 Toyota Camry.jpg",
+      "image": "/images/2018 Toyota Camry.jpg",
       "promo": false
     },
     {
@@ -42,7 +42,7 @@
       "year": "2017",
       "body": "Sedan",
       "note": "Request a quote",
-      "image": "project/assets/2017 Honda Civic.jpg",
+      "image": "/images/2017 Honda Civic.jpg",
       "promo": false
     },
     {
@@ -51,7 +51,7 @@
       "year": "2019",
       "body": "SUV",
       "note": "Request a quote",
-      "image": "project/assets/2019 Hyundai Tucson.jpg",
+      "image": "/images/2019 Hyundai Tucson.jpg",
       "promo": false
     }
   ]
