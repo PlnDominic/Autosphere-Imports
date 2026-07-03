@@ -22,12 +22,6 @@
     a { color: inherit; }
     ::selection { background: #1452d6; color: #fff; }
 
-    .mono {
-      font-family: 'Anonymous Pro', monospace;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-
     /* ── Header ── */
     header {
       background: linear-gradient(160deg, #04205f 0%, #0937a0 70%, #0c44bd 100%);
@@ -53,20 +47,17 @@
       opacity: .78;
       margin-top: 4px;
     }
-    .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-    .header-right a, .header-right button {
+    .header-right a {
       font-family: 'Anonymous Pro', monospace;
       font-size: 11px;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: #fff;
-      background: none;
       border: 1px solid rgba(255,255,255,.4);
       padding: 8px 14px;
-      cursor: pointer;
       text-decoration: none;
     }
-    .header-right a:hover, .header-right button:hover { background: rgba(255,255,255,.1); }
+    .header-right a:hover { background: rgba(255,255,255,.1); }
 
     main {
       max-width: 980px;
@@ -106,7 +97,7 @@
       color: #4c515d;
       margin-bottom: 6px;
     }
-    input[type="text"], input[type="password"] {
+    input[type="text"] {
       width: 100%;
       padding: 11px 13px;
       border: 1px solid #d8d5cf;
@@ -115,14 +106,10 @@
       font-size: 15px;
       color: #16181f;
     }
-    input[type="text"]:focus, input[type="password"]:focus {
-      outline: 2px solid #1452d6;
-      outline-offset: -1px;
-    }
+    input[type="text"]:focus { outline: 2px solid #1452d6; outline-offset: -1px; }
     .field { margin-top: 16px; }
     .field:first-child { margin-top: 0; }
     .hint { font-size: 13px; color: #8a8e98; margin-top: 6px; }
-    .hint a { color: #1452d6; }
     .check {
       display: flex;
       align-items: center;
@@ -285,7 +272,7 @@
     .editor-actions { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
     input[type="file"] { font-size: 13px; }
 
-    .publish-bar {
+    .draft-bar {
       position: sticky;
       bottom: 0;
       margin-top: 30px;
@@ -298,7 +285,7 @@
       gap: 16px;
       flex-wrap: wrap;
     }
-    .publish-note { font-size: 13.5px; color: #4c515d; }
+    .draft-note { font-size: 13.5px; color: #4c515d; }
 
     .hidden { display: none !important; }
   </style>
@@ -312,127 +299,85 @@
     </a>
     <div class="header-right">
       <a href="index.html" target="_blank" rel="noopener">View site</a>
-      <button id="logout-btn" class="hidden" type="button">Sign out</button>
     </div>
   </header>
 
   <main>
 
-    <!-- ══════════ LOGIN ══════════ -->
-    <section id="login-view">
-      <p class="eyebrow">Content management</p>
-      <h1>Manage the homepage lineup.</h1>
-      <p class="lead">Sign in with a GitHub access token to add, edit or remove the cars shown on the Autosphere Imports homepage. Changes are published straight to the live site.</p>
+    <p class="eyebrow">Content management</p>
+    <h1>Manage the homepage lineup.</h1>
+    <p class="lead">Add, edit, remove, and reorder the cars shown in the &ldquo;Cars ready to import&rdquo; section. This is a local draft workspace — changes are saved in this browser only. Publishing straight to the live homepage isn't set up yet.</p>
 
-      <div class="card" style="max-width:560px;">
+    <div class="msg" id="manager-msg"></div>
+
+    <div class="toolbar">
+      <h2 id="count-heading">Lineup</h2>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <span class="dirty-note hidden" id="dirty-note">Unsaved local changes</span>
+        <button class="btn small" id="add-btn" type="button">+ Add a car</button>
+      </div>
+    </div>
+
+    <div id="car-list"></div>
+
+    <!-- Editor -->
+    <div class="card hidden" id="editor">
+      <h2 id="editor-title" style="margin:0 0 18px;font-family:'Merriweather Sans',sans-serif;font-weight:800;font-size:20px;">Add a car</h2>
+      <div class="editor-grid">
         <div class="field">
-          <label for="token-input">GitHub access token</label>
-          <input type="password" id="token-input" autocomplete="off" placeholder="github_pat_… or ghp_…">
-          <p class="hint">
-            Create a fine-grained token at
-            <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a>
-            scoped to this repository with <strong>Contents: Read and write</strong> permission. The token stays in your browser — it is only ever sent to api.github.com.
-          </p>
+          <label for="f-name">Model name *</label>
+          <input type="text" id="f-name" placeholder="e.g. Toyota Corolla">
         </div>
-        <label class="check">
-          <input type="checkbox" id="remember-check">
-          Remember me on this device
-        </label>
-        <div class="msg" id="login-msg"></div>
-        <div class="editor-actions">
-          <button class="btn" id="login-btn" type="button">Sign in</button>
+        <div class="field">
+          <label for="f-year">Year</label>
+          <input type="text" id="f-year" placeholder="e.g. 2018" inputmode="numeric">
         </div>
-      </div>
-    </section>
-
-    <!-- ══════════ MANAGER ══════════ -->
-    <section id="manager-view" class="hidden">
-      <p class="eyebrow">Homepage inventory</p>
-      <h1>Cars on the homepage.</h1>
-      <p class="lead">These cards appear in the &ldquo;Cars ready to import&rdquo; section, in the order below. Add or edit cars, then press <strong>Publish</strong> to push them live.</p>
-
-      <div class="msg" id="manager-msg"></div>
-
-      <div class="toolbar">
-        <h2 id="count-heading">Lineup</h2>
-        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-          <span class="dirty-note hidden" id="dirty-note">Unpublished changes</span>
-          <button class="btn small" id="add-btn" type="button">+ Add a car</button>
+        <div class="field">
+          <label for="f-body">Body type</label>
+          <input type="text" id="f-body" placeholder="e.g. Sedan / SUV / Hatchback">
+        </div>
+        <div class="field">
+          <label for="f-note">Price / note</label>
+          <input type="text" id="f-note" placeholder="e.g. from GHC 84,000 or Request a quote">
         </div>
       </div>
-
-      <div id="car-list"></div>
-
-      <!-- Editor -->
-      <div class="card hidden" id="editor">
-        <h2 id="editor-title" style="margin:0 0 18px;font-family:'Merriweather Sans',sans-serif;font-weight:800;font-size:20px;">Add a car</h2>
-        <div class="editor-grid">
-          <div class="field">
-            <label for="f-name">Model name *</label>
-            <input type="text" id="f-name" placeholder="e.g. Toyota Corolla">
-          </div>
-          <div class="field">
-            <label for="f-year">Year</label>
-            <input type="text" id="f-year" placeholder="e.g. 2018" inputmode="numeric">
-          </div>
-          <div class="field">
-            <label for="f-body">Body type</label>
-            <input type="text" id="f-body" placeholder="e.g. Sedan / SUV / Hatchback">
-          </div>
-          <div class="field">
-            <label for="f-note">Price / note</label>
-            <input type="text" id="f-note" placeholder="e.g. from GHC 84,000 or Request a quote">
-          </div>
-        </div>
-        <label class="check">
-          <input type="checkbox" id="f-promo">
-          Show the yellow &ldquo;Promo&rdquo; badge on this car
-        </label>
-        <div class="field" style="margin-top:20px;">
-          <label for="f-image-file">Photo</label>
-          <input type="file" id="f-image-file" accept="image/png,image/jpeg,image/webp">
-          <p class="hint">Upload a new photo (JPG/PNG/WebP, max 3&nbsp;MB), or leave empty to keep the current one.</p>
-          <div class="img-preview" id="f-preview"><span>No photo</span></div>
-        </div>
-        <div class="msg" id="editor-msg"></div>
-        <div class="editor-actions">
-          <button class="btn" id="save-btn" type="button">Save to lineup</button>
-          <button class="btn ghost" id="cancel-btn" type="button">Cancel</button>
-        </div>
+      <label class="check">
+        <input type="checkbox" id="f-promo">
+        Show the yellow &ldquo;Promo&rdquo; badge on this car
+      </label>
+      <div class="field" style="margin-top:20px;">
+        <label for="f-image-file">Photo</label>
+        <input type="file" id="f-image-file" accept="image/png,image/jpeg,image/webp">
+        <p class="hint">Upload a photo (JPG/PNG/WebP, max 1.5&nbsp;MB) or leave empty to keep the current one. It's stored in this browser's draft only until publishing is wired up.</p>
+        <div class="img-preview" id="f-preview"><span>No photo</span></div>
       </div>
-
-      <div class="publish-bar">
-        <button class="btn yellow" id="publish-btn" type="button">Publish to homepage</button>
-        <button class="btn ghost" id="discard-btn" type="button">Discard changes</button>
-        <span class="publish-note">Publishing commits your changes to GitHub. The live site updates within a couple of minutes.</span>
+      <div class="msg" id="editor-msg"></div>
+      <div class="editor-actions">
+        <button class="btn" id="save-btn" type="button">Save to lineup</button>
+        <button class="btn ghost" id="cancel-btn" type="button">Cancel</button>
       </div>
-    </section>
+    </div>
+
+    <div class="draft-bar">
+      <button class="btn yellow" id="download-btn" type="button">Download cars.json</button>
+      <button class="btn ghost" id="reset-btn" type="button">Reset to live version</button>
+      <span class="draft-note">Everything here stays local to this browser. Download the file and replace <code>data/cars.json</code> in the repo to actually update the homepage.</span>
+    </div>
 
   </main>
 
   <script>
     'use strict';
 
-    // ─── Configuration ───
-    const CONFIG = {
-      owner: 'PlnDominic',
-      repo: 'Autosphere-Imports',
-      branch: 'main',
-      dataPath: 'data/cars.json',
-      uploadDir: 'project/uploads/cars',
-      maxImageBytes: 3 * 1024 * 1024
-    };
-    const API = 'https://api.github.com';
-    const TOKEN_KEY = 'autosphere_admin_token';
+    const DATA_PATH = 'data/cars.json';
+    const STORAGE_KEY = 'autosphere_admin_draft_v1';
+    const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024;
 
     // ─── State ───
-    let token = null;
-    let cars = [];            // working copy
-    let publishedJson = '';   // serialized state as last loaded/published
-    let dataSha = null;       // sha of data/cars.json blob (null if file absent)
-    let editingIndex = -1;    // -1 = closed, 'new' handled via null id
+    let cars = [];          // working draft
+    let liveCars = [];      // last-known published lineup, for "reset"
+    let editingIndex = -1;
     let editingIsNew = false;
-    let pendingUpload = null; // { name, base64, dataUrl } for the editor form
 
     // ─── DOM helpers ───
     const $ = (id) => document.getElementById(id);
@@ -444,119 +389,58 @@
       el.textContent = text || '';
     }
 
-    // ─── GitHub API ───
-    async function gh(path, options = {}) {
-      const res = await fetch(API + path, {
-        ...options,
-        headers: {
-          'Accept': 'application/vnd.github+json',
-          'Authorization': 'Bearer ' + token,
-          'X-GitHub-Api-Version': '2022-11-28',
-          ...(options.headers || {})
-        }
-      });
-      if (!res.ok) {
-        let detail = '';
-        try { detail = (await res.json()).message || ''; } catch (e) { /* ignore */ }
-        const err = new Error('GitHub API ' + res.status + (detail ? ': ' + detail : ''));
-        err.status = res.status;
-        throw err;
-      }
-      return res.status === 204 ? null : res.json();
+    function serialize(list) {
+      return JSON.stringify({ cars: list }, null, 2) + '\n';
     }
 
-    function contentsUrl(path) {
-      return '/repos/' + CONFIG.owner + '/' + CONFIG.repo + '/contents/' +
-        path.split('/').map(encodeURIComponent).join('/');
+    function isDirty() {
+      return serialize(cars) !== serialize(liveCars);
     }
 
-    function utf8ToBase64(str) {
-      const bytes = new TextEncoder().encode(str);
-      let bin = '';
-      bytes.forEach((b) => { bin += String.fromCharCode(b); });
-      return btoa(bin);
+    function updateDirtyState() {
+      const dirty = isDirty();
+      $('dirty-note').classList.toggle('hidden', !dirty);
     }
 
-    function base64ToUtf8(b64) {
-      const bin = atob(b64.replace(/\n/g, ''));
-      const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
-      return new TextDecoder().decode(bytes);
-    }
-
-    async function fetchCarsFile() {
+    function saveDraft() {
       try {
-        const file = await gh(contentsUrl(CONFIG.dataPath) + '?ref=' + encodeURIComponent(CONFIG.branch));
-        dataSha = file.sha;
-        const parsed = JSON.parse(base64ToUtf8(file.content));
-        cars = Array.isArray(parsed.cars) ? parsed.cars : [];
+        localStorage.setItem(STORAGE_KEY, serialize(cars));
       } catch (err) {
-        if (err.status === 404) { dataSha = null; cars = []; }
-        else throw err;
+        setMsg($('manager-msg'), 'error', 'Could not save your draft to this browser (storage may be full). Consider using smaller photos.');
       }
-      publishedJson = serialize();
+      updateDirtyState();
     }
 
-    function serialize() {
-      return JSON.stringify({ cars }, null, 2) + '\n';
-    }
-
-    async function commitFile(path, base64Content, message, sha) {
-      const body = { message, content: base64Content, branch: CONFIG.branch };
-      if (sha) body.sha = sha;
-      return gh(contentsUrl(path), { method: 'PUT', body: JSON.stringify(body) });
-    }
-
-    // ─── Auth flow ───
-    async function signIn(rawToken, silent) {
-      token = rawToken;
-      const loginMsg = $('login-msg');
-      if (!silent) setMsg(loginMsg, 'info', 'Checking token…');
+    // ─── Initial load ───
+    async function loadInitial() {
       try {
-        const repo = await gh('/repos/' + CONFIG.owner + '/' + CONFIG.repo);
-        if (!repo.permissions || !repo.permissions.push) {
-          throw new Error('This token can read the repository but cannot write to it. It needs "Contents: Read and write" permission.');
-        }
-        await fetchCarsFile();
+        const res = await fetch(DATA_PATH, { cache: 'no-store' });
+        const data = res.ok ? await res.json() : { cars: [] };
+        liveCars = Array.isArray(data.cars) ? data.cars : [];
       } catch (err) {
-        token = null;
-        localStorage.removeItem(TOKEN_KEY);
-        setMsg(loginMsg, 'error', silent ? 'Your saved sign-in has expired — please sign in again.' : ('Sign-in failed. ' + err.message));
-        return false;
+        liveCars = [];
       }
-      if ($('remember-check').checked) localStorage.setItem(TOKEN_KEY, rawToken);
-      setMsg(loginMsg, '', '');
-      hide($('login-view'));
-      show($('manager-view'));
-      show($('logout-btn'));
+
+      const draft = localStorage.getItem(STORAGE_KEY);
+      if (draft) {
+        try {
+          const parsed = JSON.parse(draft);
+          cars = Array.isArray(parsed.cars) ? parsed.cars : liveCars.slice();
+          setMsg($('manager-msg'), 'info', 'Loaded your unsaved local draft from a previous session.');
+        } catch (err) {
+          cars = liveCars.map((c) => ({ ...c }));
+        }
+      } else {
+        cars = liveCars.map((c) => ({ ...c }));
+      }
+
       renderList();
       updateDirtyState();
-      return true;
-    }
-
-    function signOut() {
-      token = null;
-      cars = [];
-      localStorage.removeItem(TOKEN_KEY);
-      $('token-input').value = '';
-      closeEditor();
-      hide($('manager-view'));
-      hide($('logout-btn'));
-      show($('login-view'));
-      setMsg($('manager-msg'), '', '');
     }
 
     // ─── List rendering ───
     function slugify(str) {
       return String(str).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'car';
-    }
-
-    function isDirty() { return serialize() !== publishedJson; }
-
-    function updateDirtyState() {
-      const dirty = isDirty();
-      $('dirty-note').classList.toggle('hidden', !dirty);
-      $('publish-btn').disabled = !dirty;
-      $('discard-btn').disabled = !dirty;
     }
 
     function renderList() {
@@ -579,9 +463,9 @@
 
         const thumb = document.createElement('div');
         thumb.className = 'row-thumb';
-        if (car._previewUrl || car.image) {
+        if (car.image) {
           const img = document.createElement('img');
-          img.src = car._previewUrl || car.image;
+          img.src = car.image;
           img.alt = '';
           img.addEventListener('error', () => { thumb.textContent = 'No photo'; });
           thumb.appendChild(img);
@@ -651,23 +535,22 @@
       if (editingIndex === i) editingIndex = j;
       else if (editingIndex === j) editingIndex = i;
       renderList();
-      updateDirtyState();
+      saveDraft();
     }
 
     function removeCar(i) {
       const name = cars[i].name || 'this car';
-      if (!confirm('Remove "' + name + '" from the homepage lineup? (Takes effect when you publish.)')) return;
+      if (!confirm('Remove "' + name + '" from the draft lineup?')) return;
       cars.splice(i, 1);
       if (editingIndex === i && !editingIsNew) closeEditor();
       renderList();
-      updateDirtyState();
+      saveDraft();
     }
 
     // ─── Editor ───
     function openEditor(index) {
       editingIsNew = index == null;
       editingIndex = editingIsNew ? -1 : index;
-      pendingUpload = null;
       const car = editingIsNew
         ? { name: '', year: '', body: '', note: 'Request a quote', promo: false, image: '' }
         : cars[index];
@@ -679,7 +562,8 @@
       $('f-note').value = car.note || '';
       $('f-promo').checked = !!car.promo;
       $('f-image-file').value = '';
-      setPreview(car._previewUrl || car.image || '');
+      $('f-image-file').dataset.pending = '';
+      setPreview(car.image || '');
       setMsg($('editor-msg'), '', '');
 
       show($('editor'));
@@ -691,7 +575,6 @@
     function closeEditor() {
       editingIndex = -1;
       editingIsNew = false;
-      pendingUpload = null;
       hide($('editor'));
       renderList();
     }
@@ -710,24 +593,21 @@
       }
     }
 
+    let pendingImageDataUrl = null;
+
     $('f-image-file').addEventListener('change', () => {
       const file = $('f-image-file').files[0];
-      pendingUpload = null;
+      pendingImageDataUrl = null;
       if (!file) return;
-      if (file.size > CONFIG.maxImageBytes) {
-        setMsg($('editor-msg'), 'error', 'That image is larger than 3 MB — please resize it and try again.');
+      if (file.size > MAX_IMAGE_BYTES) {
+        setMsg($('editor-msg'), 'error', 'That image is larger than 1.5 MB — please resize it and try again.');
         $('f-image-file').value = '';
         return;
       }
       const reader = new FileReader();
       reader.onload = () => {
-        const dataUrl = String(reader.result);
-        pendingUpload = {
-          name: file.name,
-          base64: dataUrl.slice(dataUrl.indexOf(',') + 1),
-          dataUrl
-        };
-        setPreview(dataUrl);
+        pendingImageDataUrl = String(reader.result);
+        setPreview(pendingImageDataUrl);
         setMsg($('editor-msg'), '', '');
       };
       reader.readAsDataURL(file);
@@ -750,104 +630,50 @@
         note: $('f-note').value.trim(),
         promo: $('f-promo').checked
       };
-      if (pendingUpload) {
-        const ext = (pendingUpload.name.match(/\.(png|jpe?g|webp)$/i) || ['.jpg'])[0].toLowerCase();
-        car.image = CONFIG.uploadDir + '/' + slugify(name + '-' + car.year) + '-' + Date.now().toString(36) + ext;
-        car._upload = pendingUpload.base64;      // stripped before publish
-        car._previewUrl = pendingUpload.dataUrl; // local preview until live
-      }
+      if (pendingImageDataUrl) car.image = pendingImageDataUrl;
+
       if (editingIsNew) cars.push(car);
       else cars[editingIndex] = car;
+      pendingImageDataUrl = null;
       closeEditor();
+      saveDraft();
+    }
+
+    // ─── Draft bar actions ───
+    function downloadJson() {
+      const blob = new Blob([serialize(cars)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cars.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function resetToLive() {
+      if (!confirm('Discard all local draft changes and reload the currently published lineup?')) return;
+      closeEditor();
+      cars = liveCars.map((c) => ({ ...c }));
+      localStorage.removeItem(STORAGE_KEY);
+      renderList();
       updateDirtyState();
-    }
-
-    // ─── Publish ───
-    async function publish() {
-      const btn = $('publish-btn');
-      const msg = $('manager-msg');
-      btn.disabled = true;
-      btn.textContent = 'Publishing…';
-      try {
-        // 1. Upload any new photos.
-        for (const car of cars) {
-          if (car._upload) {
-            setMsg(msg, 'info', 'Uploading photo for ' + car.name + '…');
-            await commitFile(car.image, car._upload, 'Add photo for ' + car.name + ' via admin panel');
-            delete car._upload;
-            delete car._previewUrl;
-          }
-        }
-        // 2. Commit the lineup, retrying once on a sha conflict.
-        setMsg(msg, 'info', 'Publishing lineup…');
-        const clean = cars.map(({ _upload, _previewUrl, ...c }) => c);
-        cars = clean;
-        const content = utf8ToBase64(serialize());
-        let result;
-        try {
-          result = await commitFile(CONFIG.dataPath, content, 'Update homepage car lineup via admin panel', dataSha);
-        } catch (err) {
-          if (err.status === 409 || err.status === 422) {
-            await gh(contentsUrl(CONFIG.dataPath) + '?ref=' + encodeURIComponent(CONFIG.branch))
-              .then((f) => { dataSha = f.sha; })
-              .catch(() => { dataSha = null; });
-            result = await commitFile(CONFIG.dataPath, content, 'Update homepage car lineup via admin panel', dataSha);
-          } else {
-            throw err;
-          }
-        }
-        dataSha = result.content.sha;
-        publishedJson = serialize();
-        renderList();
-        updateDirtyState();
-        setMsg(msg, 'ok', 'Published! The homepage will show the new lineup within a couple of minutes.');
-      } catch (err) {
-        setMsg(msg, 'error', 'Publishing failed — ' + err.message + ' Your changes are still here; try again.');
-      } finally {
-        btn.textContent = 'Publish to homepage';
-        updateDirtyState();
-        btn.disabled = !isDirty();
-      }
-    }
-
-    async function discardChanges() {
-      if (!confirm('Discard all unpublished changes and reload the live lineup?')) return;
-      closeEditor();
-      const msg = $('manager-msg');
-      try {
-        await fetchCarsFile();
-        renderList();
-        updateDirtyState();
-        setMsg(msg, '', '');
-      } catch (err) {
-        setMsg(msg, 'error', 'Could not reload the lineup — ' + err.message);
-      }
+      setMsg($('manager-msg'), '', '');
     }
 
     // ─── Wire up ───
-    $('login-btn').addEventListener('click', () => {
-      const raw = $('token-input').value.trim();
-      if (!raw) { setMsg($('login-msg'), 'error', 'Paste your GitHub access token first.'); return; }
-      signIn(raw, false);
-    });
-    $('token-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('login-btn').click(); });
-    $('logout-btn').addEventListener('click', signOut);
     $('add-btn').addEventListener('click', () => openEditor(null));
     $('save-btn').addEventListener('click', saveEditor);
     $('cancel-btn').addEventListener('click', closeEditor);
-    $('publish-btn').addEventListener('click', publish);
-    $('discard-btn').addEventListener('click', discardChanges);
+    $('download-btn').addEventListener('click', downloadJson);
+    $('reset-btn').addEventListener('click', resetToLive);
 
     window.addEventListener('beforeunload', (e) => {
-      if (token && isDirty()) { e.preventDefault(); e.returnValue = ''; }
+      if (isDirty()) { e.preventDefault(); e.returnValue = ''; }
     });
 
-    // Auto sign-in with a remembered token.
-    const saved = localStorage.getItem(TOKEN_KEY);
-    if (saved) {
-      $('remember-check').checked = true;
-      signIn(saved, true);
-    }
+    loadInitial();
   </script>
 
 </body>
