@@ -1054,7 +1054,7 @@
         </a>
       </div>
 
-      <div class="car-grid reveal">
+      <div class="car-grid reveal" id="car-grid">
 
         <!-- Toyota Yaris L — has actual render image -->
         <div class="car-card">
@@ -1247,7 +1247,7 @@
     </div>
     <div class="footer-bottom">
       <span>&copy; 2026 Autosphere Imports. All rights reserved.</span>
-      <span>Tema Port &middot; Ghana</span>
+      <span>Tema Port &middot; Ghana &middot; <a href="admin.html" style="color:inherit;">Admin</a></span>
     </div>
   </footer>
 
@@ -1306,6 +1306,82 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
 
     document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+    // Inventory grid — rendered from data/cars.json (managed via admin.html).
+    // If the fetch fails (e.g. opening this file locally), the static cards
+    // above remain as a fallback.
+    (function loadInventory() {
+      const grid = document.getElementById('car-grid');
+      if (!grid) return;
+
+      const svgPlaceholder =
+        '<div class="car-placeholder">' +
+          '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M5 17h14l-1.5-4.5a2 2 0 0 0-1.9-1.5H8.4a2 2 0 0 0-1.9 1.5L5 17Z"/>' +
+            '<path d="M3 17h18v2H3zM7 19v1.5M17 19v1.5"/>' +
+          '</svg>' +
+          '<span>Photo coming soon</span>' +
+        '</div>';
+
+      function renderCar(car) {
+        const card = document.createElement('div');
+        card.className = 'car-card';
+
+        const thumb = document.createElement('div');
+        thumb.className = 'car-thumb';
+        if (car.image) {
+          const img = document.createElement('img');
+          img.src = car.image;
+          img.alt = (car.name || 'Car') + (car.year ? ' ' + car.year : '');
+          img.loading = 'lazy';
+          img.addEventListener('error', () => { thumb.innerHTML = svgPlaceholder; });
+          thumb.appendChild(img);
+        } else {
+          thumb.innerHTML = svgPlaceholder;
+        }
+        if (car.promo) {
+          const badge = document.createElement('span');
+          badge.className = 'promo-badge';
+          badge.textContent = 'Promo';
+          thumb.appendChild(badge);
+        }
+        card.appendChild(thumb);
+
+        const meta = document.createElement('div');
+        meta.className = 'car-meta';
+        const name = document.createElement('h3');
+        name.className = 'car-name';
+        name.textContent = car.name || '';
+        const year = document.createElement('span');
+        year.className = 'car-year';
+        year.textContent = car.year || '';
+        meta.append(name, year);
+        card.appendChild(meta);
+
+        const sub = document.createElement('div');
+        sub.className = 'car-sub';
+        const body = document.createElement('span');
+        body.className = 'car-body';
+        body.textContent = car.body || '';
+        const note = document.createElement('span');
+        note.className = 'car-note';
+        note.textContent = car.note || '';
+        sub.append(body, note);
+        card.appendChild(sub);
+
+        return card;
+      }
+
+      fetch('data/cars.json', { cache: 'no-store' })
+        .then((res) => (res.ok ? res.json() : Promise.reject(new Error('HTTP ' + res.status))))
+        .then((data) => {
+          const cars = Array.isArray(data && data.cars) ? data.cars : null;
+          if (!cars) return;
+          grid.innerHTML = '';
+          cars.forEach((car) => grid.appendChild(renderCar(car)));
+        })
+        .catch(() => { /* keep static fallback cards */ });
+    })();
   </script>
 
 </body>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Autosphere Imports — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=Merriweather+Sans:wght@400;500;700;800&family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      background: #faf8f4;
+      font-family: 'Assistant', system-ui, -apple-system, sans-serif;
+      color: #16181f;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    ::selection { background: #1452d6; color: #fff; }
+
+    .mono {
+      font-family: 'Anonymous Pro', monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(160deg, #04205f 0%, #0937a0 70%, #0c44bd 100%);
+      color: #fff;
+      padding: 18px clamp(18px, 5vw, 56px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .logo { display: flex; flex-direction: column; line-height: 1; text-decoration: none; }
+    .logo-name {
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: .17em;
+    }
+    .logo-tag {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 8px;
+      letter-spacing: .4em;
+      opacity: .78;
+      margin-top: 4px;
+    }
+    .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .header-right a, .header-right button {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #fff;
+      background: none;
+      border: 1px solid rgba(255,255,255,.4);
+      padding: 8px 14px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .header-right a:hover, .header-right button:hover { background: rgba(255,255,255,.1); }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: clamp(28px, 5vh, 48px) clamp(18px, 4vw, 32px) 80px;
+    }
+    .eyebrow {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #1452d6;
+      margin: 0;
+    }
+    h1 {
+      margin: 10px 0 0;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.08;
+    }
+    .lead { color: #4c515d; max-width: 62ch; margin: 12px 0 0; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e7e5e0;
+      padding: 24px;
+      margin-top: 26px;
+    }
+
+    label {
+      display: block;
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 10.5px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #4c515d;
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1px solid #d8d5cf;
+      background: #faf8f4;
+      font-family: 'Assistant', sans-serif;
+      font-size: 15px;
+      color: #16181f;
+    }
+    input[type="text"]:focus, input[type="password"]:focus {
+      outline: 2px solid #1452d6;
+      outline-offset: -1px;
+    }
+    .field { margin-top: 16px; }
+    .field:first-child { margin-top: 0; }
+    .hint { font-size: 13px; color: #8a8e98; margin-top: 6px; }
+    .hint a { color: #1452d6; }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14px;
+      color: #4c515d;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+    .check input { width: 16px; height: 16px; accent-color: #1452d6; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #0a2a78;
+      color: #fff;
+      border: none;
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 14px 24px;
+      cursor: pointer;
+    }
+    .btn:hover { background: #0c35a0; }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .btn.yellow { background: #ffce3a; color: #0a2a78; }
+    .btn.yellow:hover { background: #f5c22a; }
+    .btn.ghost {
+      background: none;
+      color: #16181f;
+      border: 1px solid #d8d5cf;
+      font-weight: 400;
+    }
+    .btn.ghost:hover { background: #f1ece3; }
+    .btn.danger { background: none; border: 1px solid #d33; color: #b22; font-weight: 400; }
+    .btn.danger:hover { background: #fdf1f1; }
+    .btn.small { padding: 8px 13px; font-size: 10.5px; }
+
+    .msg {
+      margin-top: 16px;
+      padding: 13px 16px;
+      font-size: 14px;
+      display: none;
+    }
+    .msg.error { display: block; background: #fdf1f1; border: 1px solid #ecc; color: #922; }
+    .msg.ok { display: block; background: #eef7ee; border: 1px solid #cde5cd; color: #26622a; }
+    .msg.info { display: block; background: #eef3fd; border: 1px solid #cdd9f0; color: #1a3f8f; }
+
+    /* ── Car list ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    .toolbar h2 {
+      margin: 0;
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+    }
+    .dirty-note {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #b8860b;
+    }
+
+    .car-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid #e7e5e0;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .car-row.editing { outline: 2px solid #1452d6; outline-offset: -1px; }
+    .row-thumb {
+      width: 84px;
+      height: 63px;
+      flex: none;
+      background: #f1ece3;
+      border: 1px solid #e7e5e0;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: #b6b2aa;
+      font-size: 11px;
+    }
+    .row-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .row-main { flex: 1 1 200px; min-width: 0; }
+    .row-name {
+      font-family: 'Merriweather Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+    .row-badge {
+      font-family: 'Anonymous Pro', monospace;
+      font-size: 9.5px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #0a2a78;
+      background: #ffce3a;
+      padding: 3px 7px;
+    }
+    .row-sub {
+      font-size: 13px;
+      color: #8a8e98;
+      font-family: 'Anonymous Pro', monospace;
+      letter-spacing: .05em;
+      margin-top: 3px;
+    }
+    .row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .icon-btn {
+      background: none;
+      border: 1px solid #d8d5cf;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      color: #4c515d;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .icon-btn:hover { background: #f1ece3; }
+    .icon-btn:disabled { opacity: .35; cursor: default; }
+
+    /* ── Editor form ── */
+    .editor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+      gap: 16px;
+    }
+    .editor-grid .field { margin-top: 0; }
+    .img-preview {
+      margin-top: 10px;
+      width: 180px;
+      aspect-ratio: 4/3;
+      background: #f1ece3;
+      border: 1px solid #e7e5e0;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: #b6b2aa;
+      font-size: 12px;
+    }
+    .img-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .editor-actions { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    input[type="file"] { font-size: 13px; }
+
+    .publish-bar {
+      position: sticky;
+      bottom: 0;
+      margin-top: 30px;
+      background: rgba(250, 248, 244, .95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid #e7e5e0;
+      padding: 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .publish-note { font-size: 13.5px; color: #4c515d; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="index.html">
+      <span class="logo-name">AUTOSPHERE</span>
+      <span class="logo-tag">IMPORTS &middot; ADMIN</span>
+    </a>
+    <div class="header-right">
+      <a href="index.html" target="_blank" rel="noopener">View site</a>
+      <button id="logout-btn" class="hidden" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ══════════ LOGIN ══════════ -->
+    <section id="login-view">
+      <p class="eyebrow">Content management</p>
+      <h1>Manage the homepage lineup.</h1>
+      <p class="lead">Sign in with a GitHub access token to add, edit or remove the cars shown on the Autosphere Imports homepage. Changes are published straight to the live site.</p>
+
+      <div class="card" style="max-width:560px;">
+        <div class="field">
+          <label for="token-input">GitHub access token</label>
+          <input type="password" id="token-input" autocomplete="off" placeholder="github_pat_… or ghp_…">
+          <p class="hint">
+            Create a fine-grained token at
+            <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a>
+            scoped to this repository with <strong>Contents: Read and write</strong> permission. The token stays in your browser — it is only ever sent to api.github.com.
+          </p>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="remember-check">
+          Remember me on this device
+        </label>
+        <div class="msg" id="login-msg"></div>
+        <div class="editor-actions">
+          <button class="btn" id="login-btn" type="button">Sign in</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ MANAGER ══════════ -->
+    <section id="manager-view" class="hidden">
+      <p class="eyebrow">Homepage inventory</p>
+      <h1>Cars on the homepage.</h1>
+      <p class="lead">These cards appear in the &ldquo;Cars ready to import&rdquo; section, in the order below. Add or edit cars, then press <strong>Publish</strong> to push them live.</p>
+
+      <div class="msg" id="manager-msg"></div>
+
+      <div class="toolbar">
+        <h2 id="count-heading">Lineup</h2>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <span class="dirty-note hidden" id="dirty-note">Unpublished changes</span>
+          <button class="btn small" id="add-btn" type="button">+ Add a car</button>
+        </div>
+      </div>
+
+      <div id="car-list"></div>
+
+      <!-- Editor -->
+      <div class="card hidden" id="editor">
+        <h2 id="editor-title" style="margin:0 0 18px;font-family:'Merriweather Sans',sans-serif;font-weight:800;font-size:20px;">Add a car</h2>
+        <div class="editor-grid">
+          <div class="field">
+            <label for="f-name">Model name *</label>
+            <input type="text" id="f-name" placeholder="e.g. Toyota Corolla">
+          </div>
+          <div class="field">
+            <label for="f-year">Year</label>
+            <input type="text" id="f-year" placeholder="e.g. 2018" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="f-body">Body type</label>
+            <input type="text" id="f-body" placeholder="e.g. Sedan / SUV / Hatchback">
+          </div>
+          <div class="field">
+            <label for="f-note">Price / note</label>
+            <input type="text" id="f-note" placeholder="e.g. from GHC 84,000 or Request a quote">
+          </div>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="f-promo">
+          Show the yellow &ldquo;Promo&rdquo; badge on this car
+        </label>
+        <div class="field" style="margin-top:20px;">
+          <label for="f-image-file">Photo</label>
+          <input type="file" id="f-image-file" accept="image/png,image/jpeg,image/webp">
+          <p class="hint">Upload a new photo (JPG/PNG/WebP, max 3&nbsp;MB), or leave empty to keep the current one.</p>
+          <div class="img-preview" id="f-preview"><span>No photo</span></div>
+        </div>
+        <div class="msg" id="editor-msg"></div>
+        <div class="editor-actions">
+          <button class="btn" id="save-btn" type="button">Save to lineup</button>
+          <button class="btn ghost" id="cancel-btn" type="button">Cancel</button>
+        </div>
+      </div>
+
+      <div class="publish-bar">
+        <button class="btn yellow" id="publish-btn" type="button">Publish to homepage</button>
+        <button class="btn ghost" id="discard-btn" type="button">Discard changes</button>
+        <span class="publish-note">Publishing commits your changes to GitHub. The live site updates within a couple of minutes.</span>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    'use strict';
+
+    // ─── Configuration ───
+    const CONFIG = {
+      owner: 'PlnDominic',
+      repo: 'Autosphere-Imports',
+      branch: 'main',
+      dataPath: 'data/cars.json',
+      uploadDir: 'project/uploads/cars',
+      maxImageBytes: 3 * 1024 * 1024
+    };
+    const API = 'https://api.github.com';
+    const TOKEN_KEY = 'autosphere_admin_token';
+
+    // ─── State ───
+    let token = null;
+    let cars = [];            // working copy
+    let publishedJson = '';   // serialized state as last loaded/published
+    let dataSha = null;       // sha of data/cars.json blob (null if file absent)
+    let editingIndex = -1;    // -1 = closed, 'new' handled via null id
+    let editingIsNew = false;
+    let pendingUpload = null; // { name, base64, dataUrl } for the editor form
+
+    // ─── DOM helpers ───
+    const $ = (id) => document.getElementById(id);
+    const show = (el) => el.classList.remove('hidden');
+    const hide = (el) => el.classList.add('hidden');
+
+    function setMsg(el, type, text) {
+      el.className = 'msg' + (type ? ' ' + type : '');
+      el.textContent = text || '';
+    }
+
+    // ─── GitHub API ───
+    async function gh(path, options = {}) {
+      const res = await fetch(API + path, {
+        ...options,
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': 'Bearer ' + token,
+          'X-GitHub-Api-Version': '2022-11-28',
+          ...(options.headers || {})
+        }
+      });
+      if (!res.ok) {
+        let detail = '';
+        try { detail = (await res.json()).message || ''; } catch (e) { /* ignore */ }
+        const err = new Error('GitHub API ' + res.status + (detail ? ': ' + detail : ''));
+        err.status = res.status;
+        throw err;
+      }
+      return res.status === 204 ? null : res.json();
+    }
+
+    function contentsUrl(path) {
+      return '/repos/' + CONFIG.owner + '/' + CONFIG.repo + '/contents/' +
+        path.split('/').map(encodeURIComponent).join('/');
+    }
+
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let bin = '';
+      bytes.forEach((b) => { bin += String.fromCharCode(b); });
+      return btoa(bin);
+    }
+
+    function base64ToUtf8(b64) {
+      const bin = atob(b64.replace(/\n/g, ''));
+      const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+      return new TextDecoder().decode(bytes);
+    }
+
+    async function fetchCarsFile() {
+      try {
+        const file = await gh(contentsUrl(CONFIG.dataPath) + '?ref=' + encodeURIComponent(CONFIG.branch));
+        dataSha = file.sha;
+        const parsed = JSON.parse(base64ToUtf8(file.content));
+        cars = Array.isArray(parsed.cars) ? parsed.cars : [];
+      } catch (err) {
+        if (err.status === 404) { dataSha = null; cars = []; }
+        else throw err;
+      }
+      publishedJson = serialize();
+    }
+
+    function serialize() {
+      return JSON.stringify({ cars }, null, 2) + '\n';
+    }
+
+    async function commitFile(path, base64Content, message, sha) {
+      const body = { message, content: base64Content, branch: CONFIG.branch };
+      if (sha) body.sha = sha;
+      return gh(contentsUrl(path), { method: 'PUT', body: JSON.stringify(body) });
+    }
+
+    // ─── Auth flow ───
+    async function signIn(rawToken, silent) {
+      token = rawToken;
+      const loginMsg = $('login-msg');
+      if (!silent) setMsg(loginMsg, 'info', 'Checking token…');
+      try {
+        const repo = await gh('/repos/' + CONFIG.owner + '/' + CONFIG.repo);
+        if (!repo.permissions || !repo.permissions.push) {
+          throw new Error('This token can read the repository but cannot write to it. It needs "Contents: Read and write" permission.');
+        }
+        await fetchCarsFile();
+      } catch (err) {
+        token = null;
+        localStorage.removeItem(TOKEN_KEY);
+        setMsg(loginMsg, 'error', silent ? 'Your saved sign-in has expired — please sign in again.' : ('Sign-in failed. ' + err.message));
+        return false;
+      }
+      if ($('remember-check').checked) localStorage.setItem(TOKEN_KEY, rawToken);
+      setMsg(loginMsg, '', '');
+      hide($('login-view'));
+      show($('manager-view'));
+      show($('logout-btn'));
+      renderList();
+      updateDirtyState();
+      return true;
+    }
+
+    function signOut() {
+      token = null;
+      cars = [];
+      localStorage.removeItem(TOKEN_KEY);
+      $('token-input').value = '';
+      closeEditor();
+      hide($('manager-view'));
+      hide($('logout-btn'));
+      show($('login-view'));
+      setMsg($('manager-msg'), '', '');
+    }
+
+    // ─── List rendering ───
+    function slugify(str) {
+      return String(str).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'car';
+    }
+
+    function isDirty() { return serialize() !== publishedJson; }
+
+    function updateDirtyState() {
+      const dirty = isDirty();
+      $('dirty-note').classList.toggle('hidden', !dirty);
+      $('publish-btn').disabled = !dirty;
+      $('discard-btn').disabled = !dirty;
+    }
+
+    function renderList() {
+      const list = $('car-list');
+      list.innerHTML = '';
+      $('count-heading').textContent = 'Lineup — ' + cars.length + (cars.length === 1 ? ' car' : ' cars');
+
+      if (!cars.length) {
+        const empty = document.createElement('div');
+        empty.className = 'card';
+        empty.style.color = '#8a8e98';
+        empty.textContent = 'No cars yet. Use “Add a car” to post the first one.';
+        list.appendChild(empty);
+        return;
+      }
+
+      cars.forEach((car, i) => {
+        const row = document.createElement('div');
+        row.className = 'car-row' + (editingIndex === i && !editingIsNew ? ' editing' : '');
+
+        const thumb = document.createElement('div');
+        thumb.className = 'row-thumb';
+        if (car._previewUrl || car.image) {
+          const img = document.createElement('img');
+          img.src = car._previewUrl || car.image;
+          img.alt = '';
+          img.addEventListener('error', () => { thumb.textContent = 'No photo'; });
+          thumb.appendChild(img);
+        } else {
+          thumb.textContent = 'No photo';
+        }
+        row.appendChild(thumb);
+
+        const main = document.createElement('div');
+        main.className = 'row-main';
+        const nameEl = document.createElement('div');
+        nameEl.className = 'row-name';
+        nameEl.textContent = car.name || '(unnamed)';
+        if (car.promo) {
+          const badge = document.createElement('span');
+          badge.className = 'row-badge';
+          badge.textContent = 'Promo';
+          nameEl.appendChild(badge);
+        }
+        const subEl = document.createElement('div');
+        subEl.className = 'row-sub';
+        subEl.textContent = [car.year, car.body, car.note].filter(Boolean).join(' · ');
+        main.append(nameEl, subEl);
+        row.appendChild(main);
+
+        const actions = document.createElement('div');
+        actions.className = 'row-actions';
+
+        const up = document.createElement('button');
+        up.className = 'icon-btn';
+        up.type = 'button';
+        up.title = 'Move up';
+        up.textContent = '↑';
+        up.disabled = i === 0;
+        up.addEventListener('click', () => moveCar(i, -1));
+
+        const down = document.createElement('button');
+        down.className = 'icon-btn';
+        down.type = 'button';
+        down.title = 'Move down';
+        down.textContent = '↓';
+        down.disabled = i === cars.length - 1;
+        down.addEventListener('click', () => moveCar(i, 1));
+
+        const edit = document.createElement('button');
+        edit.className = 'btn ghost small';
+        edit.type = 'button';
+        edit.textContent = 'Edit';
+        edit.addEventListener('click', () => openEditor(i));
+
+        const del = document.createElement('button');
+        del.className = 'btn danger small';
+        del.type = 'button';
+        del.textContent = 'Remove';
+        del.addEventListener('click', () => removeCar(i));
+
+        actions.append(up, down, edit, del);
+        row.appendChild(actions);
+        list.appendChild(row);
+      });
+    }
+
+    function moveCar(i, dir) {
+      const j = i + dir;
+      if (j < 0 || j >= cars.length) return;
+      [cars[i], cars[j]] = [cars[j], cars[i]];
+      if (editingIndex === i) editingIndex = j;
+      else if (editingIndex === j) editingIndex = i;
+      renderList();
+      updateDirtyState();
+    }
+
+    function removeCar(i) {
+      const name = cars[i].name || 'this car';
+      if (!confirm('Remove "' + name + '" from the homepage lineup? (Takes effect when you publish.)')) return;
+      cars.splice(i, 1);
+      if (editingIndex === i && !editingIsNew) closeEditor();
+      renderList();
+      updateDirtyState();
+    }
+
+    // ─── Editor ───
+    function openEditor(index) {
+      editingIsNew = index == null;
+      editingIndex = editingIsNew ? -1 : index;
+      pendingUpload = null;
+      const car = editingIsNew
+        ? { name: '', year: '', body: '', note: 'Request a quote', promo: false, image: '' }
+        : cars[index];
+
+      $('editor-title').textContent = editingIsNew ? 'Add a car' : 'Edit — ' + (car.name || 'car');
+      $('f-name').value = car.name || '';
+      $('f-year').value = car.year || '';
+      $('f-body').value = car.body || '';
+      $('f-note').value = car.note || '';
+      $('f-promo').checked = !!car.promo;
+      $('f-image-file').value = '';
+      setPreview(car._previewUrl || car.image || '');
+      setMsg($('editor-msg'), '', '');
+
+      show($('editor'));
+      renderList();
+      $('editor').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      $('f-name').focus();
+    }
+
+    function closeEditor() {
+      editingIndex = -1;
+      editingIsNew = false;
+      pendingUpload = null;
+      hide($('editor'));
+      renderList();
+    }
+
+    function setPreview(src) {
+      const box = $('f-preview');
+      box.innerHTML = '';
+      if (src) {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        img.addEventListener('error', () => { box.innerHTML = '<span>No photo</span>'; });
+        box.appendChild(img);
+      } else {
+        box.innerHTML = '<span>No photo</span>';
+      }
+    }
+
+    $('f-image-file').addEventListener('change', () => {
+      const file = $('f-image-file').files[0];
+      pendingUpload = null;
+      if (!file) return;
+      if (file.size > CONFIG.maxImageBytes) {
+        setMsg($('editor-msg'), 'error', 'That image is larger than 3 MB — please resize it and try again.');
+        $('f-image-file').value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = String(reader.result);
+        pendingUpload = {
+          name: file.name,
+          base64: dataUrl.slice(dataUrl.indexOf(',') + 1),
+          dataUrl
+        };
+        setPreview(dataUrl);
+        setMsg($('editor-msg'), '', '');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function saveEditor() {
+      const name = $('f-name').value.trim();
+      if (!name) {
+        setMsg($('editor-msg'), 'error', 'Please give the car a model name.');
+        $('f-name').focus();
+        return;
+      }
+      const base = editingIsNew ? {} : cars[editingIndex];
+      const car = {
+        ...base,
+        id: base.id || slugify(name + '-' + $('f-year').value.trim() + '-' + Date.now().toString(36)),
+        name,
+        year: $('f-year').value.trim(),
+        body: $('f-body').value.trim(),
+        note: $('f-note').value.trim(),
+        promo: $('f-promo').checked
+      };
+      if (pendingUpload) {
+        const ext = (pendingUpload.name.match(/\.(png|jpe?g|webp)$/i) || ['.jpg'])[0].toLowerCase();
+        car.image = CONFIG.uploadDir + '/' + slugify(name + '-' + car.year) + '-' + Date.now().toString(36) + ext;
+        car._upload = pendingUpload.base64;      // stripped before publish
+        car._previewUrl = pendingUpload.dataUrl; // local preview until live
+      }
+      if (editingIsNew) cars.push(car);
+      else cars[editingIndex] = car;
+      closeEditor();
+      updateDirtyState();
+    }
+
+    // ─── Publish ───
+    async function publish() {
+      const btn = $('publish-btn');
+      const msg = $('manager-msg');
+      btn.disabled = true;
+      btn.textContent = 'Publishing…';
+      try {
+        // 1. Upload any new photos.
+        for (const car of cars) {
+          if (car._upload) {
+            setMsg(msg, 'info', 'Uploading photo for ' + car.name + '…');
+            await commitFile(car.image, car._upload, 'Add photo for ' + car.name + ' via admin panel');
+            delete car._upload;
+            delete car._previewUrl;
+          }
+        }
+        // 2. Commit the lineup, retrying once on a sha conflict.
+        setMsg(msg, 'info', 'Publishing lineup…');
+        const clean = cars.map(({ _upload, _previewUrl, ...c }) => c);
+        cars = clean;
+        const content = utf8ToBase64(serialize());
+        let result;
+        try {
+          result = await commitFile(CONFIG.dataPath, content, 'Update homepage car lineup via admin panel', dataSha);
+        } catch (err) {
+          if (err.status === 409 || err.status === 422) {
+            await gh(contentsUrl(CONFIG.dataPath) + '?ref=' + encodeURIComponent(CONFIG.branch))
+              .then((f) => { dataSha = f.sha; })
+              .catch(() => { dataSha = null; });
+            result = await commitFile(CONFIG.dataPath, content, 'Update homepage car lineup via admin panel', dataSha);
+          } else {
+            throw err;
+          }
+        }
+        dataSha = result.content.sha;
+        publishedJson = serialize();
+        renderList();
+        updateDirtyState();
+        setMsg(msg, 'ok', 'Published! The homepage will show the new lineup within a couple of minutes.');
+      } catch (err) {
+        setMsg(msg, 'error', 'Publishing failed — ' + err.message + ' Your changes are still here; try again.');
+      } finally {
+        btn.textContent = 'Publish to homepage';
+        updateDirtyState();
+        btn.disabled = !isDirty();
+      }
+    }
+
+    async function discardChanges() {
+      if (!confirm('Discard all unpublished changes and reload the live lineup?')) return;
+      closeEditor();
+      const msg = $('manager-msg');
+      try {
+        await fetchCarsFile();
+        renderList();
+        updateDirtyState();
+        setMsg(msg, '', '');
+      } catch (err) {
+        setMsg(msg, 'error', 'Could not reload the lineup — ' + err.message);
+      }
+    }
+
+    // ─── Wire up ───
+    $('login-btn').addEventListener('click', () => {
+      const raw = $('token-input').value.trim();
+      if (!raw) { setMsg($('login-msg'), 'error', 'Paste your GitHub access token first.'); return; }
+      signIn(raw, false);
+    });
+    $('token-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('login-btn').click(); });
+    $('logout-btn').addEventListener('click', signOut);
+    $('add-btn').addEventListener('click', () => openEditor(null));
+    $('save-btn').addEventListener('click', saveEditor);
+    $('cancel-btn').addEventListener('click', closeEditor);
+    $('publish-btn').addEventListener('click', publish);
+    $('discard-btn').addEventListener('click', discardChanges);
+
+    window.addEventListener('beforeunload', (e) => {
+      if (token && isDirty()) { e.preventDefault(); e.returnValue = ''; }
+    });
+
+    // Auto sign-in with a remembered token.
+    const saved = localStorage.getItem(TOKEN_KEY);
+    if (saved) {
+      $('remember-check').checked = true;
+      signIn(saved, true);
+    }
+  </script>
+
+</body>
+</html>
