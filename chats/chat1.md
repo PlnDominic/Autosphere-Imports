@@ -20,7 +20,7 @@ _[tool: read_file]_
 
 _[tool: read_file]_
 
-The design system is a calm, editorial skincare storefront — I'll adapt its type, layout patterns, and muted navy palette to a premium car-import site. Before building, a few questions:
+The design system is a calm, editorial skincare storefront. I'll adapt its type, layout patterns, and muted navy palette to a premium car-import site. Before building, a few questions:
 
 _[tool: questions_v2]_
 

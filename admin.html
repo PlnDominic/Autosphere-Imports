@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Autosphere Imports — Admin</title>
+  <title>Autosphere Imports - Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=Merriweather+Sans:wght@400;500;700;800&family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet">
@@ -306,7 +306,7 @@
 
     <p class="eyebrow">Content management</p>
     <h1>Manage the homepage lineup.</h1>
-    <p class="lead">Add, edit, remove, and reorder the cars shown in the &ldquo;Cars ready to import&rdquo; section. This is a local draft workspace — changes are saved in this browser only. Publishing straight to the live homepage isn't set up yet.</p>
+    <p class="lead">Add, edit, remove, and reorder the cars shown in the &ldquo;Cars ready to import&rdquo; section. This is a local draft workspace: changes are saved in this browser only. Publishing straight to the live homepage isn't set up yet.</p>
 
     <div class="msg" id="manager-msg"></div>
 
@@ -359,9 +359,8 @@
     </div>
 
     <div class="draft-bar">
-      <button class="btn yellow" id="download-btn" type="button">Download cars.json</button>
       <button class="btn ghost" id="reset-btn" type="button">Reset to live version</button>
-      <span class="draft-note">Everything here stays local to this browser. Download the file and replace <code>data/cars.json</code> in the repo to actually update the homepage.</span>
+      <span class="draft-note">Everything here stays local to this browser until publishing is wired up.</span>
     </div>
 
   </main>
@@ -446,7 +445,7 @@
     function renderList() {
       const list = $('car-list');
       list.innerHTML = '';
-      $('count-heading').textContent = 'Lineup — ' + cars.length + (cars.length === 1 ? ' car' : ' cars');
+      $('count-heading').textContent = 'Lineup - ' + cars.length + (cars.length === 1 ? ' car' : ' cars');
 
       if (!cars.length) {
         const empty = document.createElement('div');
@@ -555,7 +554,7 @@
         ? { name: '', year: '', body: '', note: 'Request a quote', promo: false, image: '' }
         : cars[index];
 
-      $('editor-title').textContent = editingIsNew ? 'Add a car' : 'Edit — ' + (car.name || 'car');
+      $('editor-title').textContent = editingIsNew ? 'Add a car' : 'Edit - ' + (car.name || 'car');
       $('f-name').value = car.name || '';
       $('f-year').value = car.year || '';
       $('f-body').value = car.body || '';
@@ -600,7 +599,7 @@
       pendingImageDataUrl = null;
       if (!file) return;
       if (file.size > MAX_IMAGE_BYTES) {
-        setMsg($('editor-msg'), 'error', 'That image is larger than 1.5 MB — please resize it and try again.');
+        setMsg($('editor-msg'), 'error', 'That image is larger than 1.5 MB. Please resize it and try again.');
         $('f-image-file').value = '';
         return;
       }
@@ -640,18 +639,6 @@
     }
 
     // ─── Draft bar actions ───
-    function downloadJson() {
-      const blob = new Blob([serialize(cars)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'cars.json';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
     function resetToLive() {
       if (!confirm('Discard all local draft changes and reload the currently published lineup?')) return;
       closeEditor();
@@ -666,7 +653,6 @@
     $('add-btn').addEventListener('click', () => openEditor(null));
     $('save-btn').addEventListener('click', saveEditor);
     $('cancel-btn').addEventListener('click', closeEditor);
-    $('download-btn').addEventListener('click', downloadJson);
     $('reset-btn').addEventListener('click', resetToLive);
 
     window.addEventListener('beforeunload', (e) => {
