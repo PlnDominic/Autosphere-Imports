@@ -1,0 +1,58 @@
+{
+  "cars": [
+    {
+      "id": "toyota-yaris-l-2016",
+      "name": "Toyota Yaris L",
+      "year": "2016",
+      "body": "Hatchback",
+      "note": "from GHC 84,000",
+      "image": "project/assets/yaris-render.png",
+      "promo": true
+    },
+    {
+      "id": "toyota-corolla-2018",
+      "name": "Toyota Corolla",
+      "year": "2018",
+      "body": "Sedan",
+      "note": "Request a quote",
+      "image": "project/assets/corolla.jpg",
+      "promo": false
+    },
+    {
+      "id": "toyota-rav4-2019",
+      "name": "Toyota RAV4",
+      "year": "2019",
+      "body": "SUV",
+      "note": "Request a quote",
+      "image": "project/assets/2019 Toyota RAV4.jpg",
+      "promo": false
+    },
+    {
+      "id": "toyota-camry-2018",
+      "name": "Toyota Camry",
+      "year": "2018",
+      "body": "Sedan",
+      "note": "Request a quote",
+      "image": "project/assets/2018 Toyota Camry.jpg",
+      "promo": false
+    },
+    {
+      "id": "honda-civic-2017",
+      "name": "Honda Civic",
+      "year": "2017",
+      "body": "Sedan",
+      "note": "Request a quote",
+      "image": "project/assets/2017 Honda Civic.jpg",
+      "promo": false
+    },
+    {
+      "id": "hyundai-tucson-2019",
+      "name": "Hyundai Tucson",
+      "year": "2019",
+      "body": "SUV",
+      "note": "Request a quote",
+      "image": "project/assets/2019 Hyundai Tucson.jpg",
+      "promo": false
+    }
+  ]
+}
