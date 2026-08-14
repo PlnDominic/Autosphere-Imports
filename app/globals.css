@@ -589,7 +589,7 @@ a { text-decoration: none; color: inherit; }
   position: relative;
   display: flex;
   flex-direction: column;
-  background: #f5f4f0;
+  background: #fff;
   overflow: hidden;
 }
 .showroom-available {
@@ -629,7 +629,6 @@ a { text-decoration: none; color: inherit; }
   height: auto;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 16px 32px rgba(0,0,0,.18));
   transition: opacity .28s ease;
 }
 .showroom-nav {
