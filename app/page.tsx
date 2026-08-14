@@ -1,7 +1,6 @@
 import carsData from '@/data/cars.json';
 import type { Car } from '@/lib/types';
 import SiteHeader from '@/components/SiteHeader';
-import Hero from '@/components/Hero';
 import Inventory from '@/components/Inventory';
 import HowItWorks from '@/components/HowItWorks';
 import Pricing from '@/components/Pricing';
@@ -15,7 +14,6 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <Hero />
       <Inventory cars={cars} />
       <HowItWorks />
       <Pricing />

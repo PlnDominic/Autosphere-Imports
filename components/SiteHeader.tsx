@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 export default function SiteHeader() {
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(true);
   const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function SiteHeader() {
 
   return (
     <header id="site-header" className={headerClass || undefined}>
-      <a href="#top" className="header-logo">
+      <a href="#inventory" className="header-logo">
         <span className="header-logo-name">AUTOSPHERE</span>
         <span className="header-logo-tag">IMPORTS &middot; DRIVING THE WORLD TO YOU</span>
       </a>
