@@ -29,6 +29,10 @@ const emptyCar = (): Car => ({
   note: 'Request a quote',
   image: '',
   promo: false,
+  engine: '',
+  fuel: 'Petrol',
+  seats: 5,
+  brand: '',
 });
 
 export default function AdminPage() {

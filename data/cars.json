@@ -7,7 +7,12 @@
       "body": "Hatchback",
       "note": "from GHC 84,000",
       "image": "/images/yaris-render.png",
-      "promo": true
+      "promo": true,
+      "engine": "1.5L",
+      "fuel": "Petrol",
+      "seats": 5,
+      "badge": "PROMO",
+      "brand": "TOYOTA"
     },
     {
       "id": "toyota-corolla-2018",
@@ -16,7 +21,11 @@
       "body": "Sedan",
       "note": "Request a quote",
       "image": "/images/corolla.jpg",
-      "promo": false
+      "promo": false,
+      "engine": "1.8L",
+      "fuel": "Petrol",
+      "seats": 5,
+      "brand": "TOYOTA"
     },
     {
       "id": "toyota-rav4-2019",
@@ -25,7 +34,12 @@
       "body": "SUV",
       "note": "Request a quote",
       "image": "/images/2019 Toyota RAV4.jpg",
-      "promo": false
+      "promo": false,
+      "engine": "2.5L",
+      "fuel": "Petrol",
+      "seats": 5,
+      "badge": "POPULAR",
+      "brand": "TOYOTA"
     },
     {
       "id": "toyota-camry-2018",
@@ -34,7 +48,11 @@
       "body": "Sedan",
       "note": "Request a quote",
       "image": "/images/2018 Toyota Camry.jpg",
-      "promo": false
+      "promo": false,
+      "engine": "2.5L",
+      "fuel": "Petrol",
+      "seats": 5,
+      "brand": "TOYOTA"
     },
     {
       "id": "honda-civic-2017",
@@ -43,7 +61,12 @@
       "body": "Sedan",
       "note": "Request a quote",
       "image": "/images/2017 Honda Civic.jpg",
-      "promo": false
+      "promo": false,
+      "engine": "1.5L Turbo",
+      "fuel": "Petrol",
+      "seats": 5,
+      "badge": "POPULAR",
+      "brand": "HONDA"
     },
     {
       "id": "hyundai-tucson-2019",
@@ -52,7 +75,12 @@
       "body": "SUV",
       "note": "Request a quote",
       "image": "/images/2019 Hyundai Tucson.jpg",
-      "promo": false
+      "promo": false,
+      "engine": "2.0L",
+      "fuel": "Petrol",
+      "seats": 5,
+      "badge": "SUV",
+      "brand": "HYUNDAI"
     }
   ]
 }

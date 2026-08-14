@@ -6,4 +6,9 @@ export interface Car {
   note: string;
   image: string;
   promo: boolean;
+  engine: string;
+  fuel: string;
+  seats: number;
+  badge?: string;
+  brand: string;
 }

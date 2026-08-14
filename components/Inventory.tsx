@@ -1,82 +1,198 @@
+'use client';
+
+import { useState, useMemo, useCallback } from 'react';
 import type { Car } from '@/lib/types';
 
-function CarCard({ car }: { car: Car }) {
+function ChevronLeft() {
   return (
-    <div className="car-card">
-      <div className="car-thumb">
-        {car.image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={car.image} alt={`${car.name}${car.year ? ' ' + car.year : ''}`} loading="lazy" />
-        ) : (
-          <div className="car-placeholder">
-            <svg
-              width="44"
-              height="44"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 17h14l-1.5-4.5a2 2 0 0 0-1.9-1.5H8.4a2 2 0 0 0-1.9 1.5L5 17Z" />
-              <path d="M3 17h18v2H3zM7 19v1.5M17 19v1.5" />
-            </svg>
-            <span>Photo coming soon</span>
-          </div>
-        )}
-        {car.promo && <span className="promo-badge">Promo</span>}
-      </div>
-      <div className="car-meta">
-        <h3 className="car-name">{car.name}</h3>
-        <span className="car-year">{car.year}</span>
-      </div>
-      <div className="car-sub">
-        <span className="car-body">{car.body}</span>
-        <span className="car-note">{car.note}</span>
-      </div>
-    </div>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M15 18l-6-6 6-6" />
+    </svg>
+  );
+}
+function ChevronRight() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9 18l6-6-6-6" />
+    </svg>
+  );
+}
+function ArrowRight() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
   );
 }
 
 export default function Inventory({ cars }: { cars: Car[] }) {
+  const brands = useMemo(
+    () => ['ALL', ...Array.from(new Set(cars.map((c) => c.brand).filter(Boolean)))],
+    [cars]
+  );
+
+  const [activeBrand, setActiveBrand] = useState<string>('ALL');
+  const [activeId, setActiveId] = useState<string>(cars[0]?.id ?? '');
+
+  const filtered = useMemo(
+    () => (activeBrand === 'ALL' ? cars : cars.filter((c) => c.brand === activeBrand)),
+    [cars, activeBrand]
+  );
+
+  const activeCar = useMemo(
+    () => filtered.find((c) => c.id === activeId) ?? filtered[0],
+    [filtered, activeId]
+  );
+
+  const activeIdx = useMemo(
+    () => filtered.findIndex((c) => c.id === activeCar?.id),
+    [filtered, activeCar]
+  );
+
+  const handleBrandChange = useCallback(
+    (brand: string) => {
+      setActiveBrand(brand);
+      const next = brand === 'ALL' ? cars : cars.filter((c) => c.brand === brand);
+      if (next.length) setActiveId(next[0].id);
+    },
+    [cars]
+  );
+
+  const handlePrev = useCallback(() => {
+    if (activeIdx > 0) setActiveId(filtered[activeIdx - 1].id);
+  }, [activeIdx, filtered]);
+
+  const handleNext = useCallback(() => {
+    if (activeIdx < filtered.length - 1) setActiveId(filtered[activeIdx + 1].id);
+  }, [activeIdx, filtered]);
+
+  if (!activeCar) return null;
+
   return (
-    <section id="inventory">
-      <div className="inventory-inner">
-        <div className="inventory-header reveal">
-          <div style={{ maxWidth: '50ch' }}>
-            <p className="section-eyebrow">The lineup</p>
-            <h2 className="section-h2">Cars ready to import.</h2>
-          </div>
-          <a
-            href="https://wa.me/233537633242"
-            target="_blank"
-            rel="noopener"
-            className="inventory-request"
-          >
-            Request a model
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+    <section id="inventory" className="showroom">
+      {/* ── Main display ─────────────────────────────────── */}
+      <div className="showroom-main">
+        {/* Brand sidebar */}
+        <aside className="showroom-brands" aria-label="Filter by brand">
+          {brands.map((brand) => (
+            <button
+              key={brand}
+              onClick={() => handleBrandChange(brand)}
+              className={'brand-btn' + (activeBrand === brand ? ' active' : '')}
+              aria-pressed={activeBrand === brand}
             >
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </a>
+              {brand}
+            </button>
+          ))}
+        </aside>
+
+        {/* Info panel */}
+        <div className="showroom-info">
+          <p className="showroom-eyebrow">In our showroom</p>
+          <div className="showroom-title-row">
+            <h2 className="showroom-car-name">{activeCar.name}</h2>
+            <span className="showroom-car-year">{activeCar.year}</span>
+          </div>
+          <p className="showroom-spec">
+            {activeCar.engine}&nbsp;&mdash;&nbsp;{activeCar.seats}-Seat {activeCar.body}
+          </p>
+          <div className="showroom-divider" />
+          <ul className="showroom-actions">
+            <li>
+              <a href="https://wa.me/233537633242" target="_blank" rel="noopener noreferrer">
+                Reserve this car <ArrowRight />
+              </a>
+            </li>
+            <li>
+              <a href="https://wa.me/233537633242" target="_blank" rel="noopener noreferrer">
+                Request a Quote <ArrowRight />
+              </a>
+            </li>
+            <li>
+              <a href="#contact">
+                Contact Us <ArrowRight />
+              </a>
+            </li>
+          </ul>
         </div>
 
-        <div className="car-grid reveal">
-          {cars.map((car) => (
-            <CarCard key={car.id} car={car} />
-          ))}
+        {/* Visual panel */}
+        <div className="showroom-visual">
+          <div className="showroom-available">
+            <span className="showroom-available-label">Available now</span>
+            <strong className="showroom-available-count">{cars.length} Vehicles</strong>
+          </div>
+
+          <div className="showroom-img-wrap">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              key={activeCar.id}
+              src={activeCar.image}
+              alt={`${activeCar.name} ${activeCar.year}`}
+              className="showroom-car-img"
+            />
+          </div>
+
+          <div className="showroom-nav">
+            <button
+              className="showroom-nav-btn"
+              onClick={handlePrev}
+              disabled={activeIdx === 0}
+              aria-label="Previous vehicle"
+            >
+              <ChevronLeft />
+            </button>
+            <span className="showroom-nav-count">
+              {activeIdx + 1} / {filtered.length}
+            </span>
+            <button
+              className="showroom-nav-btn"
+              onClick={handleNext}
+              disabled={activeIdx === filtered.length - 1}
+              aria-label="Next vehicle"
+            >
+              <ChevronRight />
+            </button>
+            <span className="showroom-nav-label">
+              {activeCar.body.toUpperCase()}
+            </span>
+          </div>
         </div>
+      </div>
+
+      {/* ── Thumbnail strip ───────────────────────────────── */}
+      <div className="showroom-strip" role="list">
+        {filtered.map((car) => (
+          <button
+            key={car.id}
+            role="listitem"
+            onClick={() => setActiveId(car.id)}
+            className={'strip-card' + (car.id === activeCar.id ? ' active' : '')}
+            aria-pressed={car.id === activeCar.id}
+          >
+            <div className="strip-thumb">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={car.image} alt="" />
+              {car.badge && <span className="strip-badge">{car.badge}</span>}
+            </div>
+            <p className="strip-name">{car.name}</p>
+            <span className="strip-year">{car.year}</span>
+            <div className="strip-specs">
+              <div className="strip-spec-row">
+                <em>Engine</em>
+                <span>{car.engine}</span>
+              </div>
+              <div className="strip-spec-row">
+                <em>Fuel</em>
+                <span>{car.fuel}</span>
+              </div>
+              <div className="strip-spec-row">
+                <em>Seats</em>
+                <span>{car.seats}</span>
+              </div>
+            </div>
+          </button>
+        ))}
       </div>
     </section>
   );
