@@ -678,6 +678,10 @@ a { text-decoration: none; color: inherit; }
 }
 .showroom-strip::-webkit-scrollbar { display: none; }
 
+/* Desktop: show full-width bottom strip; hide inline one */
+.strip--mobile  { display: none; }
+.strip--desktop { display: flex; }
+
 .strip-card {
   flex: 0 0 min(220px, 38vw);
   padding: 20px 16px;
@@ -797,6 +801,10 @@ a { text-decoration: none; color: inherit; }
   .showroom-img-wrap { padding: 32px 28px 16px; }
   .showroom-car-img { max-height: 260px; }
   .strip-card { flex: 0 0 min(190px, 44vw); }
+
+  /* Switch strips: hide desktop strip, show inline mobile strip */
+  .strip--desktop { display: none; }
+  .strip--mobile  { display: flex; border-top: none; border-bottom: 1px solid #e7e5e0; margin: 0 -20px; width: calc(100% + 40px); }
 }
 
 /* ── Mobile phone (≤640px) ── */

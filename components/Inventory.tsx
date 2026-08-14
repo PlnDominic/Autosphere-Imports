@@ -25,6 +25,48 @@ function ArrowRight() {
   );
 }
 
+/** Shared strip card list — rendered in two places, toggled via CSS */
+function StripCards({
+  filtered,
+  activeId,
+  activeCar,
+  onSelect,
+  className,
+}: {
+  filtered: Car[];
+  activeId: string;
+  activeCar: Car;
+  onSelect: (id: string) => void;
+  className?: string;
+}) {
+  return (
+    <div className={`showroom-strip${className ? ' ' + className : ''}`} role="list">
+      {filtered.map((car) => (
+        <button
+          key={car.id}
+          role="listitem"
+          onClick={() => onSelect(car.id)}
+          className={'strip-card' + (car.id === activeCar.id ? ' active' : '')}
+          aria-pressed={car.id === activeCar.id}
+        >
+          <div className="strip-thumb">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={car.image} alt="" />
+            {car.badge && <span className="strip-badge">{car.badge}</span>}
+          </div>
+          <p className="strip-name">{car.name}</p>
+          <span className="strip-year">{car.year}</span>
+          <div className="strip-specs">
+            <div className="strip-spec-row"><em>Engine</em><span>{car.engine}</span></div>
+            <div className="strip-spec-row"><em>Fuel</em><span>{car.fuel}</span></div>
+            <div className="strip-spec-row"><em>Seats</em><span>{car.seats}</span></div>
+          </div>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function Inventory({ cars }: { cars: Car[] }) {
   const brands = useMemo(
     () => ['ALL', ...Array.from(new Set(cars.map((c) => c.brand).filter(Boolean)))],
@@ -104,32 +146,18 @@ export default function Inventory({ cars }: { cars: Car[] }) {
           </div>
 
           <div className="showroom-nav">
-            <button
-              className="showroom-nav-btn"
-              onClick={handlePrev}
-              disabled={activeIdx === 0}
-              aria-label="Previous vehicle"
-            >
+            <button className="showroom-nav-btn" onClick={handlePrev} disabled={activeIdx === 0} aria-label="Previous vehicle">
               <ChevronLeft />
             </button>
-            <span className="showroom-nav-count">
-              {activeIdx + 1} / {filtered.length}
-            </span>
-            <button
-              className="showroom-nav-btn"
-              onClick={handleNext}
-              disabled={activeIdx === filtered.length - 1}
-              aria-label="Next vehicle"
-            >
+            <span className="showroom-nav-count">{activeIdx + 1} / {filtered.length}</span>
+            <button className="showroom-nav-btn" onClick={handleNext} disabled={activeIdx === filtered.length - 1} aria-label="Next vehicle">
               <ChevronRight />
             </button>
-            <span className="showroom-nav-label">
-              {activeCar.body.toUpperCase()}
-            </span>
+            <span className="showroom-nav-label">{activeCar.body.toUpperCase()}</span>
           </div>
         </div>
 
-        {/* Info panel — after image in DOM = after image on mobile */}
+        {/* Info panel */}
         <div className="showroom-info">
           <p className="showroom-eyebrow">In our showroom</p>
           <div className="showroom-title-row">
@@ -140,6 +168,16 @@ export default function Inventory({ cars }: { cars: Car[] }) {
             {activeCar.engine}&nbsp;&mdash;&nbsp;{activeCar.seats}-Seat {activeCar.body}
           </p>
           <div className="showroom-divider" />
+
+          {/* Strip — mobile only (above actions) */}
+          <StripCards
+            filtered={filtered}
+            activeId={activeId}
+            activeCar={activeCar}
+            onSelect={setActiveId}
+            className="strip--mobile"
+          />
+
           <ul className="showroom-actions">
             <li>
               <a href="https://wa.me/233537633242" target="_blank" rel="noopener noreferrer">
@@ -160,40 +198,14 @@ export default function Inventory({ cars }: { cars: Car[] }) {
         </div>
       </div>
 
-      {/* ── Thumbnail strip ───────────────────────────────── */}
-      <div className="showroom-strip" role="list">
-        {filtered.map((car) => (
-          <button
-            key={car.id}
-            role="listitem"
-            onClick={() => setActiveId(car.id)}
-            className={'strip-card' + (car.id === activeCar.id ? ' active' : '')}
-            aria-pressed={car.id === activeCar.id}
-          >
-            <div className="strip-thumb">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={car.image} alt="" />
-              {car.badge && <span className="strip-badge">{car.badge}</span>}
-            </div>
-            <p className="strip-name">{car.name}</p>
-            <span className="strip-year">{car.year}</span>
-            <div className="strip-specs">
-              <div className="strip-spec-row">
-                <em>Engine</em>
-                <span>{car.engine}</span>
-              </div>
-              <div className="strip-spec-row">
-                <em>Fuel</em>
-                <span>{car.fuel}</span>
-              </div>
-              <div className="strip-spec-row">
-                <em>Seats</em>
-                <span>{car.seats}</span>
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
+      {/* Strip — desktop only (full-width bottom) */}
+      <StripCards
+        filtered={filtered}
+        activeId={activeId}
+        activeCar={activeCar}
+        onSelect={setActiveId}
+        className="strip--desktop"
+      />
     </section>
   );
 }
