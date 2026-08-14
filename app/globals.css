@@ -755,11 +755,13 @@ a { text-decoration: none; color: inherit; }
   text-align: right;
 }
 
-/* ── Responsive ── */
+/* ── Tablet (≤900px) ── */
 @media (max-width: 900px) {
-  .showroom { padding-top: 74px; }
   .showroom-main { flex-wrap: wrap; min-height: auto; }
+
+  /* Brand tabs: horizontal scroll row */
   .showroom-brands {
+    order: 1;
     width: 100%;
     flex-direction: row;
     justify-content: flex-start;
@@ -772,26 +774,83 @@ a { text-decoration: none; color: inherit; }
   }
   .showroom-brands::-webkit-scrollbar { display: none; }
   .brand-btn {
-    padding: 14px 16px;
+    padding: 14px 18px;
     border-left: none;
     border-bottom: 2px solid transparent;
     white-space: nowrap;
+    font-size: 12px;
   }
   .brand-btn.active { border-bottom-color: #16181f; border-left-color: transparent; }
+
+  /* Image above info on tablet */
+  .showroom-visual {
+    order: 2;
+    flex: 1 1 100%;
+    min-height: 300px;
+  }
   .showroom-info {
+    order: 3;
     flex: 1 1 100%;
     border-right: none;
-    border-bottom: 1px solid #e7e5e0;
-    padding: 32px 22px;
+    border-top: 1px solid #e7e5e0;
+    padding: 36px 28px;
   }
-  .showroom-visual {
-    flex: 1 1 100%;
-    min-height: 280px;
-  }
+
   .showroom-available { top: 16px; right: 16px; }
-  .showroom-img-wrap { padding: 36px 24px 16px; }
-  .showroom-car-img { max-height: 240px; }
-  .strip-card { flex: 0 0 min(180px, 50vw); }
+  .showroom-img-wrap { padding: 32px 28px 16px; }
+  .showroom-car-img { max-height: 260px; }
+  .strip-card { flex: 0 0 min(190px, 44vw); }
+}
+
+/* ── Mobile (≤640px) ── */
+@media (max-width: 640px) {
+  .showroom { padding-top: 74px; }
+
+  /* Brand filter: compact, full-bleed */
+  .brand-btn { padding: 12px 14px; font-size: 11px; }
+
+  /* Image panel: tall & prominent */
+  .showroom-visual { min-height: 58vw; }
+  .showroom-img-wrap { padding: 24px 20px 12px; }
+  .showroom-car-img { max-height: min(54vw, 280px); }
+
+  /* Available now: smaller, tighter */
+  .showroom-available { top: 12px; right: 12px; }
+  .showroom-available-label { font-size: 9px; }
+  .showroom-available-count { font-size: 16px; }
+
+  /* Nav bar: bigger tap targets */
+  .showroom-nav { padding: 14px 18px; gap: 12px; }
+  .showroom-nav-btn { width: 40px; height: 40px; }
+  .showroom-nav-count { font-size: 13px; }
+
+  /* Info panel: comfortable mobile padding */
+  .showroom-info { padding: 28px 20px 32px; }
+  .showroom-eyebrow { font-size: 10px; margin-bottom: 14px; }
+
+  /* Car name: big but fits phone width */
+  .showroom-car-name {
+    font-size: clamp(28px, 9vw, 42px);
+  }
+  .showroom-car-year {
+    font-size: clamp(22px, 7vw, 34px);
+  }
+  .showroom-spec { font-size: 13.5px; margin-top: 12px; }
+  .showroom-divider { margin: 22px 0; }
+
+  /* Action links: full-width, easy to tap */
+  .showroom-actions li { border-top: 1px solid #e7e5e0; }
+  .showroom-actions a {
+    padding: 18px 4px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  /* Thumbnail strip: 2 cards visible at a glance */
+  .showroom-strip { padding-bottom: 2px; }
+  .strip-card { flex: 0 0 min(200px, 52vw); padding: 16px 14px; }
+  .strip-name { font-size: 12.5px; }
+  .strip-spec-row { font-size: 11px; }
 }
 
 /* Contact */
