@@ -15,8 +15,8 @@ export default function HomePage() {
     <>
       <SiteHeader />
       <Inventory cars={cars} />
-      <HowItWorks />
       <Pricing />
+      <HowItWorks />
       <Contact />
       <SiteFooter />
       <RevealInit />
