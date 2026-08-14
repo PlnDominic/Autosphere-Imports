@@ -511,7 +511,12 @@ a { text-decoration: none; color: inherit; }
   justify-content: center;
   padding: 56px clamp(24px, 3.5vw, 52px);
   border-right: 1px solid #e7e5e0;
+  order: 1; /* desktop: info before image */
 }
+
+/* ── Visual panel ── */
+/* (already styled below; set order here) */
+.showroom-visual { order: 2; /* desktop: image after info */ }
 .showroom-eyebrow {
   font-family: 'Anonymous Pro', monospace;
   font-size: 11px;
@@ -585,6 +590,7 @@ a { text-decoration: none; color: inherit; }
   flex-direction: column;
   background: #fff;
   overflow: hidden;
+  /* order: 2 set above alongside .showroom-info */
 }
 .showroom-available {
   position: absolute;
@@ -755,13 +761,18 @@ a { text-decoration: none; color: inherit; }
   text-align: right;
 }
 
-/* ── Tablet (≤900px) ── */
+/* ── Tablet + Mobile (≤900px) ── */
 @media (max-width: 900px) {
   .showroom-main { flex-wrap: wrap; min-height: auto; }
 
-  /* Brand tabs: horizontal scroll row */
+  /* Reset desktop orders — let DOM order take over:
+     DOM order is: brands → visual → info
+     which gives:  brand tabs → image → car info → strip  ✓  */
+  .showroom-info  { order: unset; flex: 1 1 100%; border-right: none; border-top: 1px solid #e7e5e0; padding: 36px 28px; }
+  .showroom-visual { order: unset; flex: 1 1 100%; min-height: 300px; }
+
+  /* Brand tabs: slim horizontal scroll row above image */
   .showroom-brands {
-    order: 1;
     width: 100%;
     flex-direction: row;
     justify-content: flex-start;
@@ -774,7 +785,7 @@ a { text-decoration: none; color: inherit; }
   }
   .showroom-brands::-webkit-scrollbar { display: none; }
   .brand-btn {
-    padding: 14px 18px;
+    padding: 13px 18px;
     border-left: none;
     border-bottom: 2px solid transparent;
     white-space: nowrap;
@@ -782,73 +793,44 @@ a { text-decoration: none; color: inherit; }
   }
   .brand-btn.active { border-bottom-color: #16181f; border-left-color: transparent; }
 
-  /* Image above info on tablet */
-  .showroom-visual {
-    order: 2;
-    flex: 1 1 100%;
-    min-height: 300px;
-  }
-  .showroom-info {
-    order: 3;
-    flex: 1 1 100%;
-    border-right: none;
-    border-top: 1px solid #e7e5e0;
-    padding: 36px 28px;
-  }
-
   .showroom-available { top: 16px; right: 16px; }
   .showroom-img-wrap { padding: 32px 28px 16px; }
   .showroom-car-img { max-height: 260px; }
   .strip-card { flex: 0 0 min(190px, 44vw); }
 }
 
-/* ── Mobile (≤640px) ── */
+/* ── Mobile phone (≤640px) ── */
 @media (max-width: 640px) {
-  .showroom { padding-top: 74px; }
+  /* Image: large and prominent */
+  .showroom-visual { min-height: 60vw; }
+  .showroom-img-wrap { padding: 20px 16px 10px; }
+  .showroom-car-img { max-height: min(56vw, 300px); }
 
-  /* Brand filter: compact, full-bleed */
-  .brand-btn { padding: 12px 14px; font-size: 11px; }
-
-  /* Image panel: tall & prominent */
-  .showroom-visual { min-height: 58vw; }
-  .showroom-img-wrap { padding: 24px 20px 12px; }
-  .showroom-car-img { max-height: min(54vw, 280px); }
-
-  /* Available now: smaller, tighter */
-  .showroom-available { top: 12px; right: 12px; }
+  /* "Available now" badge */
+  .showroom-available { top: 10px; right: 12px; }
   .showroom-available-label { font-size: 9px; }
   .showroom-available-count { font-size: 16px; }
 
-  /* Nav bar: bigger tap targets */
+  /* Prev / next arrows — big tap targets */
   .showroom-nav { padding: 14px 18px; gap: 12px; }
-  .showroom-nav-btn { width: 40px; height: 40px; }
+  .showroom-nav-btn { width: 44px; height: 44px; }
   .showroom-nav-count { font-size: 13px; }
 
-  /* Info panel: comfortable mobile padding */
-  .showroom-info { padding: 28px 20px 32px; }
-  .showroom-eyebrow { font-size: 10px; margin-bottom: 14px; }
+  /* Info panel */
+  .showroom-info { padding: 26px 20px 32px; }
+  .showroom-eyebrow { font-size: 10px; letter-spacing: .18em; margin-bottom: 12px; }
 
-  /* Car name: big but fits phone width */
-  .showroom-car-name {
-    font-size: clamp(28px, 9vw, 42px);
-  }
-  .showroom-car-year {
-    font-size: clamp(22px, 7vw, 34px);
-  }
+  /* Car name: fluid, fills phone width without wrapping */
+  .showroom-car-name { font-size: clamp(30px, 9vw, 44px); }
+  .showroom-car-year { font-size: clamp(24px, 7vw, 36px); }
   .showroom-spec { font-size: 13.5px; margin-top: 12px; }
-  .showroom-divider { margin: 22px 0; }
+  .showroom-divider { margin: 20px 0; }
 
-  /* Action links: full-width, easy to tap */
-  .showroom-actions li { border-top: 1px solid #e7e5e0; }
-  .showroom-actions a {
-    padding: 18px 4px;
-    font-size: 15px;
-    font-weight: 500;
-  }
+  /* Action links: tall rows, easy to tap */
+  .showroom-actions a { padding: 18px 4px; font-size: 15px; font-weight: 500; }
 
-  /* Thumbnail strip: 2 cards visible at a glance */
-  .showroom-strip { padding-bottom: 2px; }
-  .strip-card { flex: 0 0 min(200px, 52vw); padding: 16px 14px; }
+  /* Strip: ~2 cards visible, easy swipe */
+  .strip-card { flex: 0 0 52vw; padding: 14px 12px; }
   .strip-name { font-size: 12.5px; }
   .strip-spec-row { font-size: 11px; }
 }

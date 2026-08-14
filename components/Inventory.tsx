@@ -86,37 +86,7 @@ export default function Inventory({ cars }: { cars: Car[] }) {
           ))}
         </aside>
 
-        {/* Info panel */}
-        <div className="showroom-info">
-          <p className="showroom-eyebrow">In our showroom</p>
-          <div className="showroom-title-row">
-            <h2 className="showroom-car-name">{activeCar.name}</h2>
-            <span className="showroom-car-year">{activeCar.year}</span>
-          </div>
-          <p className="showroom-spec">
-            {activeCar.engine}&nbsp;&mdash;&nbsp;{activeCar.seats}-Seat {activeCar.body}
-          </p>
-          <div className="showroom-divider" />
-          <ul className="showroom-actions">
-            <li>
-              <a href="https://wa.me/233537633242" target="_blank" rel="noopener noreferrer">
-                Reserve this car <ArrowRight />
-              </a>
-            </li>
-            <li>
-              <a href="https://wa.me/233537633242" target="_blank" rel="noopener noreferrer">
-                Request a Quote <ArrowRight />
-              </a>
-            </li>
-            <li>
-              <a href="#contact">
-                Contact Us <ArrowRight />
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Visual panel */}
+        {/* Visual panel — first in DOM so it's first on mobile */}
         <div className="showroom-visual">
           <div className="showroom-available">
             <span className="showroom-available-label">Available now</span>
@@ -157,6 +127,36 @@ export default function Inventory({ cars }: { cars: Car[] }) {
               {activeCar.body.toUpperCase()}
             </span>
           </div>
+        </div>
+
+        {/* Info panel — after image in DOM = after image on mobile */}
+        <div className="showroom-info">
+          <p className="showroom-eyebrow">In our showroom</p>
+          <div className="showroom-title-row">
+            <h2 className="showroom-car-name">{activeCar.name}</h2>
+            <span className="showroom-car-year">{activeCar.year}</span>
+          </div>
+          <p className="showroom-spec">
+            {activeCar.engine}&nbsp;&mdash;&nbsp;{activeCar.seats}-Seat {activeCar.body}
+          </p>
+          <div className="showroom-divider" />
+          <ul className="showroom-actions">
+            <li>
+              <a href="https://wa.me/233537633242" target="_blank" rel="noopener noreferrer">
+                Reserve this car <ArrowRight />
+              </a>
+            </li>
+            <li>
+              <a href="https://wa.me/233537633242" target="_blank" rel="noopener noreferrer">
+                Request a Quote <ArrowRight />
+              </a>
+            </li>
+            <li>
+              <a href="#contact">
+                Contact Us <ArrowRight />
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 
