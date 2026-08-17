@@ -541,9 +541,10 @@ a { text-decoration: none; color: inherit; }
 
 /* Notify-me waitlist form (inventory empty state) */
 .notify-form { max-width: 560px; margin: 0 auto 26px; text-align: left; }
-.notify-fields { display: flex; flex-wrap: wrap; gap: 10px; }
+.notify-fields { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.notify-fields.notify-fields-optional { margin-bottom: 0; }
 .notify-fields .request-input { flex: 1 1 180px; }
-.notify-submit { margin-top: 0; flex: 0 0 auto; white-space: nowrap; }
+.notify-submit { margin-top: 14px; }
 .notify-form .request-error,
 .notify-form .request-success { text-align: center; }
 @media (max-width: 560px) {
