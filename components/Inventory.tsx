@@ -1,7 +1,16 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import Link from 'next/link';
 import type { Car } from '@/lib/types';
+import {
+  matchesPriceBand,
+  sortCars,
+  PRICE_BAND_LABELS,
+  SORT_LABELS,
+  type PriceBand,
+  type SortKey,
+} from '@/lib/carFilters';
 
 function ChevronLeft() {
   return (
@@ -73,13 +82,42 @@ export default function Inventory({ cars }: { cars: Car[] }) {
     [cars]
   );
 
+  const bodyTypes = useMemo(
+    () => Array.from(new Set(cars.map((c) => c.body).filter(Boolean))).sort(),
+    [cars]
+  );
+  const years = useMemo(
+    () =>
+      Array.from(new Set(cars.map((c) => c.year).filter(Boolean))).sort(
+        (a, b) => Number(b) - Number(a)
+      ),
+    [cars]
+  );
+
   const [activeBrand, setActiveBrand] = useState<string>('ALL');
+  const [bodyFilter, setBodyFilter] = useState<string>('ALL');
+  const [yearFilter, setYearFilter] = useState<string>('ALL');
+  const [priceFilter, setPriceFilter] = useState<PriceBand>('ALL');
+  const [promoOnly, setPromoOnly] = useState(false);
+  const [sortBy, setSortBy] = useState<SortKey>('featured');
   const [activeId, setActiveId] = useState<string>(cars[0]?.id ?? '');
 
-  const filtered = useMemo(
-    () => (activeBrand === 'ALL' ? cars : cars.filter((c) => c.brand === activeBrand)),
-    [cars, activeBrand]
-  );
+  const filtersActive =
+    activeBrand !== 'ALL' ||
+    bodyFilter !== 'ALL' ||
+    yearFilter !== 'ALL' ||
+    priceFilter !== 'ALL' ||
+    promoOnly ||
+    sortBy !== 'featured';
+
+  const filtered = useMemo(() => {
+    let list = activeBrand === 'ALL' ? cars : cars.filter((c) => c.brand === activeBrand);
+    if (bodyFilter !== 'ALL') list = list.filter((c) => c.body === bodyFilter);
+    if (yearFilter !== 'ALL') list = list.filter((c) => c.year === yearFilter);
+    if (promoOnly) list = list.filter((c) => c.promo);
+    if (priceFilter !== 'ALL') list = list.filter((c) => matchesPriceBand(c.note, priceFilter));
+    return sortCars(list, sortBy);
+  }, [cars, activeBrand, bodyFilter, yearFilter, priceFilter, promoOnly, sortBy]);
 
   const activeCar = useMemo(
     () => filtered.find((c) => c.id === activeId) ?? filtered[0],
@@ -91,14 +129,26 @@ export default function Inventory({ cars }: { cars: Car[] }) {
     [filtered, activeCar]
   );
 
-  const handleBrandChange = useCallback(
-    (brand: string) => {
-      setActiveBrand(brand);
-      const next = brand === 'ALL' ? cars : cars.filter((c) => c.brand === brand);
-      if (next.length) setActiveId(next[0].id);
-    },
-    [cars]
-  );
+  // Whenever any filter narrows the list past the currently selected car,
+  // fall back to the first result instead of showing a stale selection.
+  useEffect(() => {
+    if (filtered.length && !filtered.some((c) => c.id === activeId)) {
+      setActiveId(filtered[0].id);
+    }
+  }, [filtered, activeId]);
+
+  const handleBrandChange = useCallback((brand: string) => {
+    setActiveBrand(brand);
+  }, []);
+
+  const resetFilters = useCallback(() => {
+    setActiveBrand('ALL');
+    setBodyFilter('ALL');
+    setYearFilter('ALL');
+    setPriceFilter('ALL');
+    setPromoOnly(false);
+    setSortBy('featured');
+  }, []);
 
   const handlePrev = useCallback(() => {
     if (activeIdx > 0) setActiveId(filtered[activeIdx - 1].id);
@@ -108,10 +158,100 @@ export default function Inventory({ cars }: { cars: Car[] }) {
     if (activeIdx < filtered.length - 1) setActiveId(filtered[activeIdx + 1].id);
   }, [activeIdx, filtered]);
 
-  if (!activeCar) return null;
-
   return (
     <section id="inventory" className="showroom">
+      {/* ── Filter & sort toolbar ────────────────────────── */}
+      <div className="showroom-filters">
+        <label className="showroom-filter-field">
+          <span className="showroom-filter-label">Body</span>
+          <select
+            className="showroom-filter-select"
+            value={bodyFilter}
+            onChange={(e) => setBodyFilter(e.target.value)}
+          >
+            <option value="ALL">All types</option>
+            {bodyTypes.map((body) => (
+              <option key={body} value={body}>
+                {body}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="showroom-filter-field">
+          <span className="showroom-filter-label">Year</span>
+          <select
+            className="showroom-filter-select"
+            value={yearFilter}
+            onChange={(e) => setYearFilter(e.target.value)}
+          >
+            <option value="ALL">All years</option>
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="showroom-filter-field">
+          <span className="showroom-filter-label">Price</span>
+          <select
+            className="showroom-filter-select"
+            value={priceFilter}
+            onChange={(e) => setPriceFilter(e.target.value as PriceBand)}
+          >
+            {(Object.keys(PRICE_BAND_LABELS) as PriceBand[]).map((band) => (
+              <option key={band} value={band}>
+                {PRICE_BAND_LABELS[band]}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="showroom-filter-toggle">
+          <input type="checkbox" checked={promoOnly} onChange={(e) => setPromoOnly(e.target.checked)} />
+          Promo only
+        </label>
+
+        <label className="showroom-filter-field">
+          <span className="showroom-filter-label">Sort</span>
+          <select
+            className="showroom-filter-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortKey)}
+          >
+            {(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
+              <option key={key} value={key}>
+                {SORT_LABELS[key]}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <span className="showroom-filter-count">
+          {filtered.length} {filtered.length === 1 ? 'match' : 'matches'}
+        </span>
+
+        {filtersActive && (
+          <button type="button" className="showroom-filter-reset" onClick={resetFilters}>
+            Reset filters
+          </button>
+        )}
+      </div>
+
+      {filtered.length === 0 || !activeCar ? (
+        <div className="showroom-empty">
+          <p>No cars match those filters right now.</p>
+          <p>
+            <button type="button" className="showroom-filter-reset" onClick={resetFilters}>
+              Reset filters
+            </button>{' '}
+            or <Link href="#request">request the car you have in mind</Link> and we&apos;ll source it.
+          </p>
+        </div>
+      ) : (
+        <>
       {/* ── Main display ─────────────────────────────────── */}
       <div className="showroom-main">
         {/* Brand sidebar */}
@@ -190,6 +330,11 @@ export default function Inventory({ cars }: { cars: Car[] }) {
               </a>
             </li>
             <li>
+              <Link href={`/cars/${activeCar.id}`}>
+                View Full Details <ArrowRight />
+              </Link>
+            </li>
+            <li>
               <a href="#request">
                 Request a Different Car <ArrowRight />
               </a>
@@ -211,6 +356,8 @@ export default function Inventory({ cars }: { cars: Car[] }) {
         onSelect={setActiveId}
         className="strip--desktop"
       />
+        </>
+      )}
     </section>
   );
 }

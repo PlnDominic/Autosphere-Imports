@@ -463,6 +463,84 @@ a { text-decoration: none; color: inherit; }
   padding-top: 74px; /* clear fixed header */
 }
 
+/* ── Filter & sort toolbar ── */
+.showroom-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  padding: 16px clamp(20px, 3.5vw, 40px);
+  border-bottom: 1px solid #e7e5e0;
+  background: #faf8f4;
+}
+.showroom-filter-field {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.showroom-filter-label {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #8a8e98;
+}
+.showroom-filter-select {
+  border: 1px solid #d8d5cd;
+  background: #fff;
+  padding: 7px 9px;
+  font-family: 'Assistant', sans-serif;
+  font-size: 13px;
+  color: #16181f;
+  max-width: 180px;
+}
+.showroom-filter-select:focus { outline: none; border-color: #1452d6; }
+.showroom-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #16181f;
+  cursor: pointer;
+  user-select: none;
+}
+.showroom-filter-count {
+  font-size: 12.5px;
+  color: #8a8e98;
+  white-space: nowrap;
+}
+.showroom-filter-reset {
+  margin-left: auto;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #1452d6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+}
+.showroom-empty {
+  padding: 80px clamp(20px, 5vw, 56px);
+  text-align: center;
+  color: #4c515d;
+  font-size: 15px;
+}
+.showroom-empty p:first-child { font-size: 18px; color: #16181f; font-weight: 600; margin: 0 0 10px; }
+.showroom-empty a { color: #1452d6; text-decoration: underline; }
+.showroom-empty .showroom-filter-reset { display: inline; margin: 0; }
+
+@media (max-width: 640px) {
+  .showroom-filters { gap: 10px; padding: 14px 16px; }
+  .showroom-filter-field { flex: 1 1 calc(50% - 10px); }
+  .showroom-filter-select { flex: 1; max-width: none; }
+  .showroom-filter-toggle { flex: 1 1 100%; }
+  .showroom-filter-count { flex: 1 1 auto; }
+  .showroom-filter-reset { margin-left: 0; flex: 0 0 auto; }
+}
+
 /* ── Main display area ── */
 .showroom-main {
   display: flex;
@@ -841,6 +919,124 @@ a { text-decoration: none; color: inherit; }
   .strip-card { flex: 0 0 52vw; padding: 14px 12px; }
   .strip-name { font-size: 12.5px; }
   .strip-spec-row { font-size: 11px; }
+}
+
+/* Car detail page */
+.car-detail {
+  background: #fff;
+  padding: clamp(104px, 14vh, 140px) clamp(20px, 5vw, 56px) 0;
+}
+.car-detail-inner { max-width: 1100px; margin: 0 auto; padding-bottom: clamp(64px, 9vh, 100px); }
+.car-detail-back {
+  display: inline-block;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #6b7180;
+  margin-bottom: 28px;
+}
+.car-detail-back:hover { color: #1452d6; }
+.car-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+.car-detail-media {
+  position: relative;
+  background: #faf8f4;
+  border: 1px solid #e7e5e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  min-height: 320px;
+}
+.car-detail-media img { max-width: 100%; max-height: 380px; width: auto; height: auto; object-fit: contain; }
+.car-detail-tag {
+  position: absolute;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 5px 10px;
+}
+.car-detail-tag-badge { top: 16px; left: 16px; background: #16181f; color: #fff; }
+.car-detail-tag-promo { top: 16px; right: 16px; background: #ffce3a; color: #0a2a78; }
+.car-detail-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.car-detail-name {
+  margin: 0;
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(30px, 3.6vw, 44px);
+  line-height: 1.05;
+  color: #16181f;
+}
+.car-detail-year {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 32px);
+  color: #c4c4c4;
+}
+.car-detail-note { margin: 12px 0 0; font-size: 17px; font-weight: 600; color: #1452d6; }
+.car-detail-specs {
+  margin: 26px 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 24px;
+  padding-top: 22px;
+  border-top: 1px solid #e7e5e0;
+}
+.car-detail-specs div { display: flex; flex-direction: column; gap: 4px; }
+.car-detail-specs dt {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #8a8e98;
+}
+.car-detail-specs dd { margin: 0; font-size: 15px; font-weight: 600; color: #16181f; }
+.car-detail-cta { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+.car-detail-cta-secondary { font-size: 13.5px; color: #6b7180; text-decoration: underline; }
+.car-detail-form {
+  margin-top: clamp(56px, 8vh, 88px);
+  background: #faf8f4;
+  border: 1px solid #e7e5e0;
+  padding: clamp(28px, 4vw, 44px);
+  max-width: 720px;
+}
+.car-detail-related { margin-top: clamp(56px, 8vh, 88px); }
+.car-detail-related-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 18px;
+}
+.car-detail-related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #e7e5e0;
+  padding: 14px;
+  transition: border-color .18s;
+}
+.car-detail-related-card:hover { border-color: #16181f; }
+.car-detail-related-thumb { aspect-ratio: 4/3; background: #ebe9e3; overflow: hidden; }
+.car-detail-related-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.car-detail-related-name { font-family: 'Merriweather Sans', sans-serif; font-weight: 700; font-size: 14px; color: #16181f; }
+.car-detail-related-year { font-family: 'Anonymous Pro', monospace; font-size: 11.5px; color: #8a8e98; }
+
+@media (max-width: 760px) {
+  .car-detail-grid { grid-template-columns: 1fr; }
+  .car-detail-specs { grid-template-columns: 1fr 1fr; }
 }
 
 /* Request a car */
