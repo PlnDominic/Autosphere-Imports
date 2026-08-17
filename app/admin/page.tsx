@@ -6,7 +6,59 @@ import type { Car } from '@/lib/types';
 import styles from './admin.module.css';
 
 const STORAGE_KEY = 'autosphere_admin_draft_v1';
-const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024;
+const RAW_IMAGE_MAX_BYTES = 10 * 1024 * 1024;
+const RESIZE_MAX_DIMENSION = 1600;
+const RESIZE_QUALITY = 0.82;
+const BLOB_URL_RE = /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//;
+
+function extForType(type: string): string {
+  if (type === 'image/png') return '.png';
+  if (type === 'image/webp') return '.webp';
+  return '.jpg';
+}
+
+// Downscales the image in-browser before it ever leaves the device, so
+// uploads stay small and cheap regardless of the source photo's size.
+async function resizeImage(file: File): Promise<Blob> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, RESIZE_MAX_DIMENSION / Math.max(bitmap.width, bitmap.height));
+  const width = Math.max(1, Math.round(bitmap.width * scale));
+  const height = Math.max(1, Math.round(bitmap.height * scale));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('This browser cannot process images. Please try a different browser.');
+  ctx.drawImage(bitmap, 0, 0, width, height);
+
+  const outputType = file.type === 'image/png' ? 'image/png' : file.type === 'image/webp' ? 'image/webp' : 'image/jpeg';
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => (blob ? resolve(blob) : reject(new Error('Could not process that image.'))),
+      outputType,
+      RESIZE_QUALITY,
+    );
+  });
+}
+
+async function uploadCarPhoto(blob: Blob, filename: string): Promise<string> {
+  const body = new FormData();
+  body.append('file', blob, filename);
+  const res = await fetch('/api/upload', { method: 'POST', body });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Upload failed. Please try again.');
+  return data.url as string;
+}
+
+function deleteCarPhoto(url: string) {
+  if (!BLOB_URL_RE.test(url)) return;
+  fetch('/api/upload', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+  }).catch(() => {});
+}
 
 function slugify(str: string): string {
   return (
@@ -50,6 +102,7 @@ export default function AdminPage() {
   const [form, setForm] = useState<Car>(emptyCar());
   const [previewSrc, setPreviewSrc] = useState('');
   const [editorMsg, setEditorMsg] = useState('');
+  const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isDirty = loaded && serialize(cars) !== serialize(liveCars);
@@ -127,6 +180,7 @@ export default function AdminPage() {
   function removeCar(i: number) {
     const name = cars[i].name || 'this car';
     if (!confirm(`Remove "${name}" from the draft lineup?`)) return;
+    if (cars[i].image) deleteCarPhoto(cars[i].image);
     setCars((prev) => prev.filter((_, idx) => idx !== i));
     if (editingIndex === i && !editingIsNew) closeEditor();
   }
@@ -149,25 +203,35 @@ export default function AdminPage() {
     setEditorOpen(false);
   }
 
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > MAX_IMAGE_BYTES) {
-      setEditorMsg('That image is larger than 1.5 MB. Please resize it and try again.');
+    if (file.size > RAW_IMAGE_MAX_BYTES) {
+      setEditorMsg('That image is larger than 10 MB. Please choose a smaller photo.');
       e.target.value = '';
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = String(reader.result);
-      setForm((prev) => ({ ...prev, image: dataUrl }));
-      setPreviewSrc(dataUrl);
-      setEditorMsg('');
-    };
-    reader.readAsDataURL(file);
+
+    const previousImage = form.image;
+    setUploading(true);
+    setEditorMsg('');
+    try {
+      const resized = await resizeImage(file);
+      const filename = `${slugify(form.name || 'car')}${extForType(resized.type)}`;
+      const url = await uploadCarPhoto(resized, filename);
+      setForm((prev) => ({ ...prev, image: url }));
+      setPreviewSrc(url);
+      if (previousImage && previousImage !== url) deleteCarPhoto(previousImage);
+    } catch (err) {
+      setEditorMsg(err instanceof Error ? err.message : 'Upload failed. Please try again.');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
   }
 
   function saveEditor() {
+    if (uploading) return;
     const name = form.name.trim();
     if (!name) {
       setEditorMsg('Please give the car a model name.');
@@ -396,13 +460,18 @@ export default function AdminPage() {
                 accept="image/png,image/jpeg,image/webp"
                 ref={fileInputRef}
                 onChange={handleImageChange}
+                disabled={uploading}
               />
               <p className={styles.hint}>
-                Upload a photo (JPG/PNG/WebP, max 1.5 MB) or leave empty to keep the current one.
-                It&apos;s stored in this browser&apos;s draft only until publishing is wired up.
+                Upload a photo (JPG/PNG/WebP, up to 10 MB — it&apos;s resized in your browser
+                before uploading) or leave empty to keep the current one. Photos are hosted on
+                Vercel Blob storage, so they&apos;re already live once uploaded even though the
+                lineup itself is still a local draft.
               </p>
               <div className={styles['img-preview']}>
-                {previewSrc ? (
+                {uploading ? (
+                  <span>Uploading&hellip;</span>
+                ) : previewSrc ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={previewSrc} alt="" />
                 ) : (
@@ -412,8 +481,8 @@ export default function AdminPage() {
             </div>
             {editorMsg && <div className={`${styles.msg} ${styles.msgError}`}>{editorMsg}</div>}
             <div className={styles['editor-actions']}>
-              <button className={styles.btn} type="button" onClick={saveEditor}>
-                Save to lineup
+              <button className={styles.btn} type="button" onClick={saveEditor} disabled={uploading}>
+                {uploading ? 'Uploading photo…' : 'Save to lineup'}
               </button>
               <button className={`${styles.btn} ${styles.ghost}`} type="button" onClick={closeEditor}>
                 Cancel
