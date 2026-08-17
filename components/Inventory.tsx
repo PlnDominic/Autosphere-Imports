@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import type { Car } from '@/lib/types';
 import {
   matchesPriceBand,
   sortCars,
   PRICE_BAND_LABELS,
-  SORT_LABELS,
   type PriceBand,
   type SortKey,
 } from '@/lib/carFilters';
 import NotifyMeForm from './NotifyMeForm';
+import FilterModal from './FilterModal';
 
 function describeFilters({
   brand,
@@ -53,6 +53,18 @@ function ArrowRight() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+function SlidersIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="18" x2="20" y2="18" />
+      <circle cx="9" cy="6" r="2" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="12" r="2" fill="currentColor" stroke="none" />
+      <circle cx="7" cy="18" r="2" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -124,6 +136,7 @@ export default function Inventory({ cars }: { cars: Car[] }) {
   const [promoOnly, setPromoOnly] = useState(false);
   const [sortBy, setSortBy] = useState<SortKey>('featured');
   const [activeId, setActiveId] = useState<string>(cars[0]?.id ?? '');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const filtersActive =
     activeBrand !== 'ALL' ||
@@ -132,6 +145,10 @@ export default function Inventory({ cars }: { cars: Car[] }) {
     priceFilter !== 'ALL' ||
     promoOnly ||
     sortBy !== 'featured';
+
+  const modalFilterCount = [bodyFilter !== 'ALL', yearFilter !== 'ALL', priceFilter !== 'ALL', promoOnly].filter(
+    Boolean
+  ).length;
 
   const filtered = useMemo(() => {
     let list = activeBrand === 'ALL' ? cars : cars.filter((c) => c.brand === activeBrand);
@@ -181,87 +198,58 @@ export default function Inventory({ cars }: { cars: Car[] }) {
     if (activeIdx < filtered.length - 1) setActiveId(filtered[activeIdx + 1].id);
   }, [activeIdx, filtered]);
 
+  // Only show the floating filter button while the section itself is on
+  // screen — once the visitor scrolls past it into Pricing/Contact/etc.
+  // there's nothing left for it to filter.
+  const sectionRef = useRef<HTMLElement>(null);
+  const [sectionVisible, setSectionVisible] = useState(true);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setSectionVisible(entry.isIntersecting), {
+      rootMargin: '-74px 0px 0px 0px',
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <section id="inventory" className="showroom">
-      {/* ── Filter & sort toolbar ────────────────────────── */}
-      <div className="showroom-filters">
-        <label className="showroom-filter-field">
-          <span className="showroom-filter-label">Body</span>
-          <select
-            className="showroom-filter-select"
-            value={bodyFilter}
-            onChange={(e) => setBodyFilter(e.target.value)}
-          >
-            <option value="ALL">All types</option>
-            {bodyTypes.map((body) => (
-              <option key={body} value={body}>
-                {body}
-              </option>
-            ))}
-          </select>
-        </label>
+    <section id="inventory" className="showroom" ref={sectionRef}>
+      {/* ── Filter trigger — floating icon, kept out of the hero flow ──
+          Hidden once results are empty (that state has its own inline
+          "Adjust filters" link) or once the section scrolls out of view,
+          so it never sits on top of a form field or another section. ── */}
+      {activeCar && sectionVisible && (
+        <button
+          type="button"
+          className="filter-fab"
+          onClick={() => setFiltersOpen(true)}
+          aria-haspopup="dialog"
+          aria-label={modalFilterCount ? `Filter cars (${modalFilterCount} active)` : 'Filter cars'}
+        >
+          <SlidersIcon />
+          {modalFilterCount > 0 && <span className="filter-fab-badge">{modalFilterCount}</span>}
+        </button>
+      )}
 
-        <label className="showroom-filter-field">
-          <span className="showroom-filter-label">Year</span>
-          <select
-            className="showroom-filter-select"
-            value={yearFilter}
-            onChange={(e) => setYearFilter(e.target.value)}
-          >
-            <option value="ALL">All years</option>
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="showroom-filter-field">
-          <span className="showroom-filter-label">Price</span>
-          <select
-            className="showroom-filter-select"
-            value={priceFilter}
-            onChange={(e) => setPriceFilter(e.target.value as PriceBand)}
-          >
-            {(Object.keys(PRICE_BAND_LABELS) as PriceBand[]).map((band) => (
-              <option key={band} value={band}>
-                {PRICE_BAND_LABELS[band]}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="showroom-filter-toggle">
-          <input type="checkbox" checked={promoOnly} onChange={(e) => setPromoOnly(e.target.checked)} />
-          Promo only
-        </label>
-
-        <label className="showroom-filter-field">
-          <span className="showroom-filter-label">Sort</span>
-          <select
-            className="showroom-filter-select"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortKey)}
-          >
-            {(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
-              <option key={key} value={key}>
-                {SORT_LABELS[key]}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <span className="showroom-filter-count">
-          {filtered.length} {filtered.length === 1 ? 'match' : 'matches'}
-        </span>
-
-        {filtersActive && (
-          <button type="button" className="showroom-filter-reset" onClick={resetFilters}>
-            Reset filters
-          </button>
-        )}
-      </div>
+      <FilterModal
+        open={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        bodyTypes={bodyTypes}
+        years={years}
+        bodyFilter={bodyFilter}
+        setBodyFilter={setBodyFilter}
+        yearFilter={yearFilter}
+        setYearFilter={setYearFilter}
+        priceFilter={priceFilter}
+        setPriceFilter={setPriceFilter}
+        promoOnly={promoOnly}
+        setPromoOnly={setPromoOnly}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        resultCount={filtered.length}
+        onReset={resetFilters}
+      />
 
       {filtered.length === 0 || !activeCar ? (
         <div className="showroom-empty">
@@ -273,9 +261,17 @@ export default function Inventory({ cars }: { cars: Car[] }) {
             criteria={describeFilters({ brand: activeBrand, body: bodyFilter, year: yearFilter, price: priceFilter, promoOnly })}
           />
           <p>
-            <button type="button" className="showroom-filter-reset" onClick={resetFilters}>
-              Reset filters
+            <button type="button" className="showroom-filter-reset" onClick={() => setFiltersOpen(true)}>
+              Adjust filters
             </button>{' '}
+            {filtersActive && (
+              <>
+                &middot;{' '}
+                <button type="button" className="showroom-filter-reset" onClick={resetFilters}>
+                  Reset filters
+                </button>{' '}
+              </>
+            )}
             or <Link href="#request">request the exact car you have in mind</Link> and we&apos;ll
             source it.
           </p>
