@@ -19,6 +19,7 @@ export default function SiteFooter() {
               <a href="#inventory">Inventory</a>
               <a href="#how">How it works</a>
               <a href="#pricing">Pricing</a>
+              <a href="#estimator">Cost estimator</a>
               <a href="#request">Request a car</a>
               <a href="#contact">Contact</a>
             </div>

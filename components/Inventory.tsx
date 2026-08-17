@@ -11,6 +11,29 @@ import {
   type PriceBand,
   type SortKey,
 } from '@/lib/carFilters';
+import NotifyMeForm from './NotifyMeForm';
+
+function describeFilters({
+  brand,
+  body,
+  year,
+  price,
+  promoOnly,
+}: {
+  brand: string;
+  body: string;
+  year: string;
+  price: PriceBand;
+  promoOnly: boolean;
+}): string {
+  const parts: string[] = [];
+  if (brand !== 'ALL') parts.push(`Brand: ${brand}`);
+  if (body !== 'ALL') parts.push(`Body type: ${body}`);
+  if (year !== 'ALL') parts.push(`Year: ${year}`);
+  if (price !== 'ALL') parts.push(`Price: ${PRICE_BAND_LABELS[price]}`);
+  if (promoOnly) parts.push('Promo only');
+  return parts.length ? parts.join(', ') : 'Browsing all cars (no specific filters set)';
+}
 
 function ChevronLeft() {
   return (
@@ -243,11 +266,18 @@ export default function Inventory({ cars }: { cars: Car[] }) {
       {filtered.length === 0 || !activeCar ? (
         <div className="showroom-empty">
           <p>No cars match those filters right now.</p>
+          <p className="showroom-empty-criteria">
+            Looking for: {describeFilters({ brand: activeBrand, body: bodyFilter, year: yearFilter, price: priceFilter, promoOnly })}
+          </p>
+          <NotifyMeForm
+            criteria={describeFilters({ brand: activeBrand, body: bodyFilter, year: yearFilter, price: priceFilter, promoOnly })}
+          />
           <p>
             <button type="button" className="showroom-filter-reset" onClick={resetFilters}>
               Reset filters
             </button>{' '}
-            or <Link href="#request">request the car you have in mind</Link> and we&apos;ll source it.
+            or <Link href="#request">request the exact car you have in mind</Link> and we&apos;ll
+            source it.
           </p>
         </div>
       ) : (

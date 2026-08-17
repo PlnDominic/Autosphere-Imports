@@ -93,6 +93,9 @@ export default async function CarDetailPage({ params }: Props) {
                 >
                   Reserve on WhatsApp
                 </a>
+                <Link href="/#estimator" className="car-detail-cta-secondary">
+                  Estimate the landed cost
+                </Link>
                 <Link href="/#inventory" className="car-detail-cta-secondary">
                   See the rest of the lineup
                 </Link>
