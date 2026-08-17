@@ -63,6 +63,9 @@ export default function SiteHeader() {
         <a href="#pricing" onClick={() => setNavOpen(false)}>
           Pricing
         </a>
+        <a href="#request" onClick={() => setNavOpen(false)}>
+          Request a car
+        </a>
         <a href="#contact" onClick={() => setNavOpen(false)}>
           Contact
         </a>

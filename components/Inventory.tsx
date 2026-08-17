@@ -190,6 +190,11 @@ export default function Inventory({ cars }: { cars: Car[] }) {
               </a>
             </li>
             <li>
+              <a href="#request">
+                Request a Different Car <ArrowRight />
+              </a>
+            </li>
+            <li>
               <a href="#contact">
                 Contact Us <ArrowRight />
               </a>

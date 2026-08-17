@@ -4,6 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import Inventory from '@/components/Inventory';
 import HowItWorks from '@/components/HowItWorks';
 import Pricing from '@/components/Pricing';
+import RequestCar from '@/components/RequestCar';
 import Contact from '@/components/Contact';
 import SiteFooter from '@/components/SiteFooter';
 import RevealInit from '@/components/RevealInit';
@@ -17,6 +18,7 @@ export default function HomePage() {
       <Inventory cars={cars} />
       <Pricing />
       <HowItWorks />
+      <RequestCar />
       <Contact />
       <SiteFooter />
       <RevealInit />

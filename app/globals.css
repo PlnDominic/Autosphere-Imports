@@ -843,6 +843,100 @@ a { text-decoration: none; color: inherit; }
   .strip-spec-row { font-size: 11px; }
 }
 
+/* Request a car */
+.request {
+  background: #faf8f4;
+  padding: clamp(72px, 11vh, 128px) clamp(20px, 5vw, 56px);
+}
+.request-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+.request-lead {
+  margin: 18px 0 0;
+  max-width: 42ch;
+  color: #4c515d;
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+.request-form {
+  background: #fff;
+  border: 1px solid #e7e5e0;
+  padding: clamp(24px, 3vw, 36px);
+}
+.request-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+.request-field-wide { grid-column: 1 / -1; }
+.request-label {
+  display: block;
+  margin-bottom: 7px;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #6b7180;
+}
+.request-input,
+.request-textarea {
+  width: 100%;
+  border: 1px solid #d8d5cd;
+  background: #fff;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 14.5px;
+  color: #16181f;
+}
+.request-input:focus,
+.request-textarea:focus {
+  outline: none;
+  border-color: #1452d6;
+}
+.request-textarea { resize: vertical; }
+.request-error {
+  margin: 18px 0 0;
+  color: #b3261e;
+  font-size: 13.5px;
+}
+.request-success {
+  margin: 18px 0 0;
+  color: #1a7a3c;
+  font-size: 13.5px;
+}
+.request-submit {
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #16181f;
+  color: #fff;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 15px 26px;
+  border: none;
+  cursor: pointer;
+}
+.request-submit:hover { background: #1452d6; }
+.request-hint {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  color: #8a8e98;
+}
+@media (max-width: 760px) {
+  .request-inner { grid-template-columns: 1fr; }
+  .request-grid { grid-template-columns: 1fr; }
+  .request-submit { width: 100%; justify-content: center; }
+}
+
 /* Contact */
 #contact {
   position: relative;
